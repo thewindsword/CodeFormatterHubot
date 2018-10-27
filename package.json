@@ -5,6 +5,10 @@
   "author": "thewindsword_sfp4 <as5544070@gmail.com>",
   "description": "A simple helpful robot for your Company",
   "dependencies": {
+    "axios": "^0.18.0",
+    "base64-img": "^1.0.4",
+    "file-api": "^0.10.4",
+    "form-data": "^2.3.3",
     "hubot": "^3.1.1",
     "hubot-bearychat": "^0.7.2",
     "hubot-diagnostics": "^1.0.0",
@@ -15,7 +19,9 @@
     "hubot-redis-brain": "^1.0.0",
     "hubot-rules": "^1.0.0",
     "hubot-scripts": "^2.17.2",
-    "hubot-shipit": "^0.2.1"
+    "hubot-shipit": "^0.2.1",
+    "request": "^2.88.0",
+    "string-hash": "^1.1.3"
   },
   "engines": {
     "node": "0.10.x"

@@ -1,9 +1,21 @@
+const fs = require("fs");
+const path = require("path");
 const prettier = require("prettier");
+const stringHash = require("string-hash");
+
+const carbonFunc = require('../src/carbonExec');
+const FormData = require('form-data');
+const request = require('request');
+const axios = require('axios');
+// const base64Img = require('base64-img');
+
+let TEMP_PATH = path.resolve(__dirname, '../temp/');
 
 module.exports = (robot)=>{
-    robot.hear(/((?<=\{).*(?=\}))/,(res)=>{
+    robot.hear(/((?<=\{).*(?=\}$))/,(res)=>{
+        // console.log("jsonHear",res.match[0]);
         let codeBody;
-        console.log(res.match[1]);
+        // console.log(res.match[1]);
         try{
             codeBody = prettier.format("{"+res.match[1]+"}",{
                 parser: "json"
@@ -15,7 +27,7 @@ module.exports = (robot)=>{
         if(!codeBody){
             // res.send(null);
         }else{
-            res.send("```json\n" + codeBody + "\n```")
+            res.send("```json\n" + codeBody + "\n```");
         }
     })
     robot.respond(/t:([a-z|A-Z]+) ([\d\D]*)/,(res)=>{
@@ -36,25 +48,127 @@ module.exports = (robot)=>{
             res.reply("```"+codeType+"\n" + codeBody + "\n```");
         }
     })
-    robot.respond(/(\{.*\})$/i,(res)=>{
-        console.log('jsonFormatter',res.match[0]);
-        let codeBody;
+    robot.respond(/img t:([a-z|A-Z]+) ([\d\D]*)$/,(res)=>{
+        console.log('img translate',res.match[0]);
+        res.reply("图片生成中！");
+        // hubot-test: img t:javascript function(){let a = 222; }
+        let prepareToWrite = res.match[2],fileExt,fileParser,fileName = 'temp_'+stringHash(prepareToWrite);
+        switch(res.match[1]){
+            case "javascript":
+                fileExt = '.js';
+                break;
+            case "typescript":
+                fileExt = '.ts';
+                break;
+            case "css":
+                fileExt = '.css';
+                fileParser = 'css';
+                break;
+            case "scss":
+                fileExt = '.scss';
+                fileParser = 'scss';
+                break;
+            case "less":
+                fileExt = '.less';
+                fileParser = 'less';
+                break;
+            case "json":
+                fileExt = '.json';
+                fileParser = 'json';
+                break;
+            // case "graphql":
+            //     fileExt = '.';
+            //     fileParser = 'graphql';
+            //     break;
+            case "markdown":
+                fileExt = '.md';
+                fileParser = 'markdown';
+                break;
+            case "vue":
+                fileExt = '.vue';
+                fileParser = 'vue';
+                break;
+            case "yaml":
+                fileExt = '.yaml';
+                fileParser = 'yaml';
+                break;
+            default: 
+                fileExt = '.txt';
+        }
         try{
-            codeBody = prettier.format(res.match[1],{
-                parser: "json"
-            });
-            // codeBody = JSON.stringify(JSON.parse(res.match[1]), null, 2)
+            if(fileParser){
+                prepareToWrite = prettier.format(prepareToWrite,{
+                    parser: fileParser
+                });
+            }else{
+                prepareToWrite = prettier.format(prepareToWrite);
+            }
+            
         }catch(e){
             // console.log(e);
-            // console.log(codeBody);   
+            prepareToWrite = res.match[2];
         }
+        
+        fs.writeFileSync(TEMP_PATH + '/' + fileName + fileExt, prepareToWrite, {
+            flag: 'w'
+        });
+        let child_carbon = carbonFunc(fileName + fileExt,fileName,TEMP_PATH);
+        child_carbon.on('exit',function(code){
+            console.log('exit:'+code);
+            if(code === 0){
+                // 保存成功 fs.existsSync(TEMP_PATH + '/' + fileName + '.png')
 
-        if(!codeBody){
-            res.reply("无法识别！该方法仅支持JSON格式，请使用@robot translate:javascript 代码");
-        }
+                // let data = base64Img.base64Sync(TEMP_PATH + '/' + fileName + '.png');
+                // res.reply(`![code](${data})`);
+                // console.log('base64.length:'+data.length);
 
-        res.reply("```json\n" + codeBody + "\n```");
-        // console.log("(1):",res.match[1]);
+                // base64由于消息长度原因会被截断，改用图床
+
+                let formData = new FormData();
+                formData.append('smfile',fs.createReadStream(TEMP_PATH + '/' + fileName + '.png'));
+
+                // axios({
+                //     url: "https://sm.ms/api/upload",
+                //     method: "post",
+                //     data: formData
+                // }).then(response => {
+                //     if (response.status === 200) {
+                //       console.log(response.data);
+                //       console.log('Removed host successfully');
+                //     }
+                //     return null;
+                //   }).catch(er => console.log(er));
+                axios.post('https://sm.ms/api/upload', formData, {
+                    headers: formData.getHeaders(),
+                }).then(result => {
+                    // Handle result…
+                    if(result.data.code !== "success"){
+                        res.reply("图片上传失败："+result.data.msg);
+                    }
+                    // console.log(result.data);
+                    res.reply(`![code](${result.data.data.url})`);
+                }).catch(er => res.reply("图片上传失败："+er));
+                
+
+            }else{
+                res.reply("生成图片失败！");
+            }
+        });
+        
+    })
+    robot.respond(/img clear$/,(res)=>{
+        robot.http("https://sm.ms/api/clear")
+        .get()((err,resp,body)=>{
+            if(err){
+                res.reply("请求发生错误：:\n"+e);
+            }
+            body = JSON.parse(body);
+            if(body.code === "success"){
+                res.reply("清楚成功："+body.msg);
+            }else{
+                res.reply("清除失败："+body.msg);
+            }
+        })
     })
     robot.respond(/api:\s?(\S*) method:\s?(get|method)\s?(\{.*\})?/,(res)=>{
         if(!res.match[2]){
