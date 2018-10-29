@@ -9,7 +9,7 @@ const bearyChatTools = require('../src/bearyChatFunc');
 const shorterDataFunc = require('../src/shorterDataFunc');
 
 const FormData = require('form-data');
-const axios = require('axios');
+const axios_prop = require('axios');
 // const base64Img = require('base64-img');
 
 let TEMP_PATH = path.resolve(__dirname, '../temp/');
@@ -164,7 +164,7 @@ module.exports = (robot)=>{
         })
     })
     robot.respond(/api:\s?(\S*) method:\s?(get|post)\s?(\{.*\})?/,(res)=>{
-        let axios = axios.create({
+        let axios = axios_prop.create({
             timeout: 1000,
             headers: {
             }
