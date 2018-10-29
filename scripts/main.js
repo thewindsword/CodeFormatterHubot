@@ -282,9 +282,10 @@ module.exports = (robot)=>{
             .catch((error)=>{
                 if (!error.response) {
                     res.reply("请求错误:",error.message);
-                    // console.log('Error', error.message);
+                    console.log('Error', error.message);
                     return;
                 }
+                console.log('Error', error.response);
                 res.reply("请求错误:",error.response);
             })
             // robot
