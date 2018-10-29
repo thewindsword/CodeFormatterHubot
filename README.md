@@ -1,6 +1,8 @@
 # CodeFormatter
 
 ## usage
+use @bot --help to get help;
+
 1. format your json fragment to markdown code fragment.
 > input json data
 
