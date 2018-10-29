@@ -19,6 +19,26 @@ const axiosJSON = axios.create({
     maxContentLength: 5096,
 })
 // const base64Img = require('base64-img');
+axiosJSON.interceptors.request.use(function (config) {
+    // Do something before request is sent
+    console.log('config',config);
+    return config;
+  }, function (error) {
+    // Do something with request error
+    return Promise.reject(error);
+});
+
+// Add a response interceptor
+axiosJSON.interceptors.response.use(function (response) {
+    // Do something with response data
+    console.log('resp',response);
+    return response;
+  }, function (error) {
+    // Do something with response error
+    return Promise.reject(error);
+});
+
+
 
 let TEMP_PATH = path.resolve(__dirname, '../temp/');
 
@@ -183,7 +203,8 @@ module.exports = (robot)=>{
         let postDataBody;
 
         if(res.match[2] === "get"){
-            axiosJSON.get(res.match[1])
+            axiosJSON
+            .get(res.match[1])
             .then((response)=>{
                 let resultDataBody,resultBody;
                 // console.log("header:", response.headers);
