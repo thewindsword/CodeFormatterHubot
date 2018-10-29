@@ -10,6 +10,18 @@ const shorterDataFunc = require('../src/shorterDataFunc');
 
 const FormData = require('form-data');
 const axios_prop = require('axios');
+const axios = axios_prop.create({
+    timeout: 1000,
+    responseType:'json',
+    headers: {
+    },
+    onDownloadProgress: (progressEvent)=>{
+        console.log(progressEvent);
+        res.reply("不允许进行文件下载");
+        return;
+    },
+    maxContentLength: 5096,
+})
 // const base64Img = require('base64-img');
 
 let TEMP_PATH = path.resolve(__dirname, '../temp/');
@@ -164,17 +176,7 @@ module.exports = (robot)=>{
         })
     })
     robot.respond(/api:\s?(\S*) method:\s?(get|post)\s?(\{.*\})?/,(res)=>{
-        let axios = axios_prop.create({
-            timeout: 1000,
-            responseType:'json',
-            headers: {
-            },
-            onDownloadProgress: (progressEvent)=>{
-                res.reply("不允许进行文件下载");
-                return;
-            },
-            maxContentLength: 2048,
-        })
+        
         res.send("接收到API生成请求!");
         if(!res.match[2]){
             res.reply("method仅支持get与post！（注意大小写）");
@@ -187,7 +189,8 @@ module.exports = (robot)=>{
         if(res.match[2] === "get"){
             axios.get(res.match[1])
             .then((response)=>{
-                console.log(response);
+                console.log("header:",response.headers);
+                console.log("data:",response.data);
             })
             .catch((error)=>{
                 console.log(error);
