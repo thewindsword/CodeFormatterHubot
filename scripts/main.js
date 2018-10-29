@@ -188,6 +188,8 @@ module.exports = (robot)=>{
                 let resultDataBody,resultBody;
                 // console.log("header:", response.headers);
                 // console.log("data:", response.data);
+                console.log(response.headers['content-type']);
+                console.log(/application\/json/.test(response.headers['content-type']));
                 if(/application\/json/.test(response.headers['content-type'])){
                     // JSON 格式数据
                     if(+response.headers['content-length'] > 10000){
