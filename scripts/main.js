@@ -29,7 +29,6 @@ module.exports = (robot)=>{
         if(!codeBody){
             // res.send(null);
         }else{
-            res.send("检测到JSON数据");
             res.send("```json\n" + codeBody + "\n```");
         }
     })
@@ -228,6 +227,8 @@ module.exports = (robot)=>{
     })
 
     robot.respond(/test getFile$/,(res)=>{
+        console.log(res);
+        res.send(JSON.stringify(res));
         let message = bearyChatTools.sendFile();
         res.send(message);
     })
