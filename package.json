@@ -20,7 +20,6 @@
     "hubot-rules": "^1.0.0",
     "hubot-scripts": "^2.17.2",
     "hubot-shipit": "^0.2.1",
-    "request": "^2.88.0",
     "string-hash": "^1.1.3"
   },
   "engines": {

@@ -4,8 +4,9 @@ const prettier = require("prettier");
 const stringHash = require("string-hash");
 
 const carbonFunc = require('../src/carbonExec');
+const clearTempFunc = require('../src/clearTemp');
+
 const FormData = require('form-data');
-const request = require('request');
 const axios = require('axios');
 // const base64Img = require('base64-img');
 
@@ -52,7 +53,10 @@ module.exports = (robot)=>{
         console.log('img translate',res.match[0]);
         res.reply("图片生成中！");
         // hubot-test: img t:javascript function(){let a = 222; }
-        let prepareToWrite = res.match[2],fileExt,fileParser,fileName = 'temp_'+stringHash(prepareToWrite);
+        let prepareToWrite = res.match[2],
+            fileExt,
+            fileParser,
+            fileName = 'temp_'+stringHash(prepareToWrite);
         switch(res.match[1]){
             case "javascript":
                 fileExt = '.js';
@@ -76,10 +80,6 @@ module.exports = (robot)=>{
                 fileExt = '.json';
                 fileParser = 'json';
                 break;
-            // case "graphql":
-            //     fileExt = '.';
-            //     fileParser = 'graphql';
-            //     break;
             case "markdown":
                 fileExt = '.md';
                 fileParser = 'markdown';
@@ -103,7 +103,6 @@ module.exports = (robot)=>{
             }else{
                 prepareToWrite = prettier.format(prepareToWrite);
             }
-            
         }catch(e){
             // console.log(e);
             prepareToWrite = res.match[2];
@@ -127,17 +126,6 @@ module.exports = (robot)=>{
                 let formData = new FormData();
                 formData.append('smfile',fs.createReadStream(TEMP_PATH + '/' + fileName + '.png'));
 
-                // axios({
-                //     url: "https://sm.ms/api/upload",
-                //     method: "post",
-                //     data: formData
-                // }).then(response => {
-                //     if (response.status === 200) {
-                //       console.log(response.data);
-                //       console.log('Removed host successfully');
-                //     }
-                //     return null;
-                //   }).catch(er => console.log(er));
                 axios.post('https://sm.ms/api/upload', formData, {
                     headers: formData.getHeaders(),
                 }).then(result => {
@@ -157,6 +145,7 @@ module.exports = (robot)=>{
         
     })
     robot.respond(/img clear$/,(res)=>{
+        clearTempFunc();
         robot.http("https://sm.ms/api/clear")
         .get()((err,resp,body)=>{
             if(err){
