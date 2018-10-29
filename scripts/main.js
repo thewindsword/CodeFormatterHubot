@@ -189,9 +189,21 @@ module.exports = (robot)=>{
         if(res.match[2] === "get"){
             axiosJSON.get(res.match[1])
             .then((response)=>{
+                let resultDataBody,resultBody;
                 console.log("header:", response.headers);
                 console.log("data:", response.data);
-                let body = response.data;
+                if(/application\/json/.test(response.headers['content-type'])){
+                    // JSON 格式数据
+                    if(+response.headers['content-length'] > 10000){
+                        resultDataBody = shorterDataFunc(response.data,res.reply);
+                    }else{
+                        resultDataBody = response.data
+                    }
+                    resultBody = `\*\*API:\*\*\n ${res.match[1]}\n\*\*Response:\*\*\n\`\`\`json\n${resultDataBody}\n\`\`\``;
+                    res.reply(resultBody);
+                }else{
+                    res.reply("不支持该返回类型");
+                }
                 console.log(typeof body);
             })
             .catch((error)=>{
