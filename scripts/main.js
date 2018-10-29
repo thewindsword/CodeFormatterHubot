@@ -178,8 +178,30 @@ module.exports = (robot)=>{
                     res.reply("请求发生错误：:\n"+e);
                 }
                 if(body.length > 10000){
-                    res.reply("返回数据过多");
-                    return;
+                    let simpleJson;
+                    res.reply("返回数据过多，简化中");
+                    try{
+                        simpleJson = JSON.parse(body);
+                    }catch(parseE){
+                        res.reply("数据解析失败:"+parseE);
+                        return;
+                    }
+                    if(Array.isArray(simpleJson)){
+                        body = JSON.stringify(simpleJson.slice(0,2));
+                    }else{
+                        let keys = Object.keys(simpleJson),result = {};
+
+                        keys.forEach(keyName=>{
+                            if(Array.isArray(simpleJson[keyName])){
+                                result[keys] = simpleJson[keyName].slice(0,1);
+                            }else if(typeof simpleJson[keyName] === "object" && simpleJson[keyName] !== null){
+                                result[keys] = "Object"
+                            }else{
+                                result[keys] = simpleJson[keyName];
+                            }
+                        })
+                        body = JSON.stringify(result);
+                    }
                 }
                 let resultDataBody;
                 try{

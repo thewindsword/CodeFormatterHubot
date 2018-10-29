@@ -9,7 +9,12 @@ module.exports = {
             token,
             vchannel_id: id,
             text: "中午吃啥啊",
-            attachments: ["中午吃什么？"]
+            attachments: [
+                {
+                    color: "#ccc",
+                    text: "中午吃什么？"
+                }
+            ]
 
         }).then(resp => resp.json())
         .then(data => console.log(data));
