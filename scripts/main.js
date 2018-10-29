@@ -191,6 +191,8 @@ module.exports = (robot)=>{
             .then((response)=>{
                 console.log("header:", response.headers);
                 console.log("data:", response.data);
+                let body = response.data;
+                console.log(typeof body);
             })
             .catch((error)=>{
                 if (!error.response) {
