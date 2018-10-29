@@ -162,7 +162,7 @@ module.exports = (robot)=>{
             }
         })
     })
-    robot.respond(/api:\s?(\S*) method:\s?(get|method)\s?(\{.*\})?/,(res)=>{
+    robot.respond(/api:\s?(\S*) method:\s?(get|post)\s?(\{.*\})?/,(res)=>{
         res.send("接收到API生成请求!");
         if(!res.match[2]){
             res.reply("method仅支持get与post！（注意大小写）");
