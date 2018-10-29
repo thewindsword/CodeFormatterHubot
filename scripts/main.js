@@ -9,8 +9,8 @@ const bearyChatTools = require('../src/bearyChatFunc');
 const shorterDataFunc = require('../src/shorterDataFunc');
 
 const FormData = require('form-data');
-const axios_prop = require('axios');
-const axios = axios_prop.create({
+const axios = require('axios');
+const axiosJSON = axios.create({
     timeout: 1000,
     responseType:'json',
     headers: {
@@ -187,7 +187,7 @@ module.exports = (robot)=>{
         let resultBody,postDataBody;
 
         if(res.match[2] === "get"){
-            axios.get(res.match[1])
+            axiosJSON.get(res.match[1])
             .then((response)=>{
                 console.log("header:",response.headers);
                 console.log("data:",response.data);
