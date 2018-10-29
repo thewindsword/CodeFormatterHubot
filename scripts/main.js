@@ -14,6 +14,7 @@ const axiosJSON = axios.create({
     timeout: 15000,
     responseType:'json',
     headers: {
+        'Accept': 'application/json',
         'content-type': 'application/json'
     },
     maxContentLength: 5096,
