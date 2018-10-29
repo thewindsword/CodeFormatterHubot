@@ -229,8 +229,8 @@ module.exports = (robot)=>{
     robot.respond(/test getFile$/,(res)=>{
         console.log(res);
         res.send(JSON.stringify(res));
-        let message = bearyChatTools.sendFile();
-        res.send(message);
+        // let message = bearyChatTools.sendFile();
+        // res.send(message);
     })
 
     robot.respond(/\-\-help$/,(res)=>{
