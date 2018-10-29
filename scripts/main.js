@@ -174,14 +174,23 @@ module.exports = (robot)=>{
         let resultBody,postDataBody;
 
         if(res.match[2] === "get"){
+            // axios.get(res.match[1])
+            // .then((response)=>{
+            //     console.log(response);
+            // })
+            // .catch((error)=>{
+            //     console.log(error);
+            // })
+
             robot
             .http(res.match[1])
-            .timeout(30000)
+            .timeout(10)
             .header('accept', 'application/json')
             .get()((err,resp,body)=>{
                 if(err){
-                    res.reply("请求发生错误：:\n"+e);
+                    res.reply("请求发生错误：:\n"+err);
                 }
+                console.log(resp.headers)
                 if(body.length > 10000){
                     body = shorterDataFunc(body,res.reply);
                 }
@@ -196,6 +205,7 @@ module.exports = (robot)=>{
                 resultBody = `\*\*API:\*\*\n ${res.match[1]}\n\*\*Response:\*\*\n\`\`\`json\n${resultDataBody}\n\`\`\``;
                 res.reply(resultBody);
             })
+
         }else if(res.match[2] === "post"){
             try{
                 postDataBody = prettier.format(res.match[3],{
@@ -210,12 +220,13 @@ module.exports = (robot)=>{
             }
             robot
             .http(res.match[1])
-            .timeout(30000)
+            .timeout(10)
             .header('accept', 'application/json')
             .post(res.match[3])((err,resp,body)=>{
                 if(err){
-                    res.reply("请求发生错误：\n"+e);
+                    res.reply("请求发生错误：\n"+err);
                 }
+                console.log(resp.headers)
                 if(body.length > 10000){
                     body = shorterDataFunc(body,res.reply);
                 }
