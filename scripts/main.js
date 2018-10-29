@@ -218,7 +218,11 @@ module.exports = (robot)=>{
                     // console.log('Error', error.message);
                     return;
                 }
-                res.reply("请求错误:",error.response);
+                if(error.response.data){
+                    res.reply("请求错误:",error.response.data);
+                }else{
+                    res.reply("请求错误:",error.response.status);
+                }
             })
 
             // robot
@@ -282,11 +286,14 @@ module.exports = (robot)=>{
             .catch((error)=>{
                 if (!error.response) {
                     res.reply("请求错误:",error.message);
-                    console.log('Error', error.message);
+                    // console.log('Error', error.message);
                     return;
                 }
-                console.log('Error', error.response);
-                res.reply("请求错误:",error.response);
+                if(error.response.data){
+                    res.reply("请求错误:",error.response.data);
+                }else{
+                    res.reply("请求错误:",error.response.status);
+                }
             })
             // robot
             // .http(res.match[1])
