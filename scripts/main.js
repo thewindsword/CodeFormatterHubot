@@ -26,6 +26,7 @@ axiosJSON.interceptors.request.use(function (config) {
     return config;
   }, function (error) {
     // Do something with request error
+    console.log('error',error);
     return Promise.reject(error);
 });
 
@@ -36,6 +37,7 @@ axiosJSON.interceptors.response.use(function (response) {
     return response;
   }, function (error) {
     // Do something with response error
+    console.log('error',error);
     return Promise.reject(error);
 });
 
