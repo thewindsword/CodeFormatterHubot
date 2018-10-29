@@ -10,37 +10,7 @@ const shorterDataFunc = require('../src/shorterDataFunc');
 
 const FormData = require('form-data');
 const axios = require('axios');
-const axiosJSON = axios.create({
-    timeout: 15000,
-    responseType:'json',
-    headers: {
-        'Accept': 'application/json',
-        'content-type': 'application/json'
-    },
-    maxContentLength: 5096,
-})
-// const base64Img = require('base64-img');
-axiosJSON.interceptors.request.use(function (config) {
-    // Do something before request is sent
-    console.log('config',config);
-    return config;
-  }, function (error) {
-    // Do something with request error
-    console.log('error',error);
-    return Promise.reject(error);
-});
-
-// Add a response interceptor
-axiosJSON.interceptors.response.use(function (response) {
-    // Do something with response data
-    console.log('resp',response);
-    return response;
-  }, function (error) {
-    // Do something with response error
-    console.log('error',error);
-    return Promise.reject(error);
-});
-
+// const axiosJSON = axios.create()
 
 
 let TEMP_PATH = path.resolve(__dirname, '../temp/');
@@ -206,8 +176,16 @@ module.exports = (robot)=>{
         let postDataBody;
 
         if(res.match[2] === "get"){
-            axiosJSON
-            .get(res.match[1])
+            axios
+            .get(res.match[1],{
+                timeout: 15000,
+                responseType:'json',
+                headers: {
+                    'Accept': 'application/json',
+                    'content-type': 'application/json'
+                },
+                maxContentLength: 5096,
+            })
             .then((response)=>{
                 let resultDataBody,resultBody;
                 // console.log("header:", response.headers);
@@ -258,7 +236,15 @@ module.exports = (robot)=>{
                 res.reply("请求数据出错，仅支持json格式：\n",e)
                 return ;
             }
-            axiosJSON.post(res.match[1],JSON.parse(postDataBody))
+            axios.post(res.match[1],JSON.parse(postDataBody),{
+                timeout: 15000,
+                responseType:'json',
+                headers: {
+                    'Accept': 'application/json',
+                    'content-type': 'application/json'
+                },
+                maxContentLength: 5096,
+            })
             .then((response)=>{
                 let resultDataBody,resultBody;
                 // console.log("header:", response.headers);
