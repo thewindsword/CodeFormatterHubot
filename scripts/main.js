@@ -11,7 +11,7 @@ const shorterDataFunc = require('../src/shorterDataFunc');
 const FormData = require('form-data');
 const axios = require('axios');
 const axiosJSON = axios.create({
-    timeout: 10000,
+    timeout: 15000,
     responseType:'json',
     headers: {
     },
@@ -184,7 +184,7 @@ module.exports = (robot)=>{
         if(!res.match[1]){
             res.reply("api地址错误");
         }
-        let resultBody,postDataBody;
+        let postDataBody;
 
         if(res.match[2] === "get"){
             axiosJSON.get(res.match[1])
