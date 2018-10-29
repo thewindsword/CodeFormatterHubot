@@ -28,10 +28,12 @@ module.exports = (robot)=>{
         if(!codeBody){
             // res.send(null);
         }else{
+            res.send("检测到JSON数据");
             res.send("```json\n" + codeBody + "\n```");
         }
     })
     robot.respond(/t:([a-z|A-Z]+) ([\d\D]*)/,(res)=>{
+        res.reply("代码格式化处理中...")
         console.log('translate',res.match[0]);
         let codeType,codeBody;
         try{
@@ -145,6 +147,7 @@ module.exports = (robot)=>{
         
     })
     robot.respond(/img clear$/,(res)=>{
+        res.send("开始清理服务器缓存!");
         clearTempFunc();
         robot.http("https://sm.ms/api/clear")
         .get()((err,resp,body)=>{
@@ -160,6 +163,7 @@ module.exports = (robot)=>{
         })
     })
     robot.respond(/api:\s?(\S*) method:\s?(get|method)\s?(\{.*\})?/,(res)=>{
+        res.send("接收到API生成请求!");
         if(!res.match[2]){
             res.reply("method仅支持get与post！（注意大小写）");
         }
