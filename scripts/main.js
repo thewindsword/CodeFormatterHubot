@@ -14,11 +14,7 @@ const axiosJSON = axios.create({
     timeout: 15000,
     responseType:'json',
     headers: {
-    },
-    onDownloadProgress: (progressEvent)=>{
-        console.log(progressEvent);
-        res.reply("不允许进行文件下载");
-        return;
+        'content-type': 'application/json'
     },
     maxContentLength: 5096,
 })
@@ -208,8 +204,10 @@ module.exports = (robot)=>{
                     }
                     resultBody = `\*\*API:\*\*\n ${res.match[1]}\n\*\*Response:\*\*\n\`\`\`json\n${resultDataBody}\n\`\`\``;
                     res.reply(resultBody);
+                    return ;
                 }else{
                     res.reply("不支持该返回类型");
+                    return ;
                 }
             })
             .catch((error)=>{
@@ -223,6 +221,7 @@ module.exports = (robot)=>{
                 }else{
                     res.reply("请求错误:",error.response.status);
                 }
+                return;
             })
         }else if(res.match[2] === "post"){
             try{
@@ -256,6 +255,7 @@ module.exports = (robot)=>{
                     res.reply(resultBody);
                 }else{
                     res.reply("不支持该返回类型");
+                    return;
                 }
             })
             .catch((error)=>{
@@ -269,6 +269,7 @@ module.exports = (robot)=>{
                 }else{
                     res.reply("请求错误:",error.response.status);
                 }
+                return;
             })
         }
 
