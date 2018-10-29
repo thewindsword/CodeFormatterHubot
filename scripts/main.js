@@ -217,7 +217,7 @@ module.exports = (robot)=>{
                 if (!error.response) {
                     res.reply("请求错误:",error.message);
                 }
-                if(error.response.data){
+                if(error.response && error.respond.data){
                     res.reply("请求错误:",error.response.data);
                 }else{
                     res.reply("请求错误:",error.response.status);
@@ -268,9 +268,8 @@ module.exports = (robot)=>{
             .catch((error)=>{
                 if (!error.response) {
                     res.reply("请求错误:",error.message);
-                    // console.log('Error', error.message);
                 }
-                if(error.response.data){
+                if(error.response && error.respond.data){
                     res.reply("请求错误:",error.response.data);
                 }else{
                     res.reply("请求错误:",error.response.status);
