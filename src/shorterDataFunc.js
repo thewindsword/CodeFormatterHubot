@@ -2,7 +2,7 @@ module.exports = (body,reply)=>{
     let simpleJson;
     reply("返回数据过多，简化中");
     try{
-        simpleJson = JSON.parse(body);
+        simpleJson = body;
     }catch(parseE){
         reply("数据解析失败:"+parseE);
         return;
