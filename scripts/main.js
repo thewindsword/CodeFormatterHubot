@@ -5,6 +5,7 @@ const stringHash = require("string-hash");
 
 const carbonFunc = require('../src/carbonExec');
 const clearTempFunc = require('../src/clearTemp');
+const bearyChatTools = require('../src/bearyChatFunc');
 
 const FormData = require('form-data');
 const axios = require('axios');
@@ -177,6 +178,10 @@ module.exports = (robot)=>{
                 if(err){
                     res.reply("请求发生错误：:\n"+e);
                 }
+                if(body.length > 10000){
+                    res.reply("返回数据过多");
+                    return;
+                }
                 let resultDataBody;
                 try{
                     resultDataBody = prettier.format(body,{
@@ -204,6 +209,10 @@ module.exports = (robot)=>{
                 if(err){
                     res.reply("请求发生错误：\n"+e);
                 }
+                if(body.length > 10000){
+                    res.reply("返回数据过多");
+                    return;
+                }
                 let resultDataBody;
                 try{
                     resultDataBody = prettier.format(body);
@@ -216,6 +225,11 @@ module.exports = (robot)=>{
             })
         }
 
+    })
+
+    robot.respond(/test getFile$/,(res)=>{
+        let message = bearyChatTools.sendFile();
+        res.send(message);
     })
 
     robot.respond(/\-\-help$/,(res)=>{
