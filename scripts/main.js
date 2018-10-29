@@ -170,7 +170,7 @@ module.exports = (robot)=>{
         let source = CancelToken.source();
         setTimeout(()=>{
             source.cancel();
-        },15000)
+        },10000)
         res.send("接收到API生成请求!");
         if(!res.match[2]){
             res.reply("method仅支持get与post！（注意大小写）");
@@ -183,7 +183,7 @@ module.exports = (robot)=>{
         if(res.match[2] === "get"){
             axios
             .get(res.match[1],{
-                timeout: 15000,
+                timeout: 10000,
                 responseType:'json',
                 headers: {
                     'Accept': 'application/json',
@@ -240,7 +240,7 @@ module.exports = (robot)=>{
                 return ;
             }
             axios.post(res.match[1],JSON.parse(postDataBody),{
-                timeout: 15000,
+                timeout: 10000,
                 responseType:'json',
                 headers: {
                     'Accept': 'application/json',
