@@ -176,12 +176,13 @@ module.exports = (robot)=>{
         if(res.match[2] === "get"){
             robot
             .http(res.match[1])
-            .timeout(30000)
+            .timeout(10)
             .header('accept', 'application/json')
             .get()((err,resp,body)=>{
                 if(err){
                     res.reply("请求发生错误：:\n"+e);
                 }
+                console.log(resp.headers)
                 if(body.length > 10000){
                     body = shorterDataFunc(body,res.reply);
                 }
@@ -210,12 +211,13 @@ module.exports = (robot)=>{
             }
             robot
             .http(res.match[1])
-            .timeout(30000)
+            .timeout(10)
             .header('accept', 'application/json')
             .post(res.match[3])((err,resp,body)=>{
                 if(err){
                     res.reply("请求发生错误：\n"+e);
                 }
+                console.log(resp.headers)
                 if(body.length > 10000){
                     body = shorterDataFunc(body,res.reply);
                 }
