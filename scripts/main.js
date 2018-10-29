@@ -164,6 +164,11 @@ module.exports = (robot)=>{
         })
     })
     robot.respond(/api:\s?(\S*) method:\s?(get|post)\s?(\{.*\})?/,(res)=>{
+        let axios = axios.create({
+            timeout: 1000,
+            headers: {
+            }
+        })
         res.send("接收到API生成请求!");
         if(!res.match[2]){
             res.reply("method仅支持get与post！（注意大小写）");
@@ -174,72 +179,69 @@ module.exports = (robot)=>{
         let resultBody,postDataBody;
 
         if(res.match[2] === "get"){
-            // axios.get(res.match[1])
-            // .then((response)=>{
-            //     console.log(response);
-            // })
-            // .catch((error)=>{
-            //     console.log(error);
-            // })
-
-            robot
-            .http(res.match[1])
-            .timeout(10)
-            .header('accept', 'application/json')
-            .get()((err,resp,body)=>{
-                if(err){
-                    res.reply("请求发生错误：:\n"+err);
-                }
-                console.log(resp.headers)
-                if(body.length > 10000){
-                    body = shorterDataFunc(body,res.reply);
-                }
-                let resultDataBody;
-                try{
-                    resultDataBody = prettier.format(body,{
-                        parser: "json"
-                    });
-                }catch(reqE){
-                    console.log("返回数据格式化出错，目前仅支持json格式：\n",reqE)
-                }
-                resultBody = `\*\*API:\*\*\n ${res.match[1]}\n\*\*Response:\*\*\n\`\`\`json\n${resultDataBody}\n\`\`\``;
-                res.reply(resultBody);
+            axios.get(res.match[1])
+            .then((response)=>{
+                console.log(response);
             })
+            .catch((error)=>{
+                console.log(error);
+            })
+
+            // robot
+            // .http(res.match[1])
+            // .header('accept', 'application/json')
+            // .timeout(100)
+            // .get()((err,resp,body)=>{
+            //     if(err){
+            //         res.reply("请求发生错误：:\n"+err);
+            //     }
+            //     console.log(resp.headers)
+            //     if(body.length > 10000){
+            //         body = shorterDataFunc(body,res.reply);
+            //     }
+            //     let resultDataBody;
+            //     try{
+            //         resultDataBody = prettier.format(body,{
+            //             parser: "json"
+            //         });
+            //     }catch(reqE){
+            //         console.log("返回数据格式化出错，目前仅支持json格式：\n",reqE)
+            //     }
+            //     resultBody = `\*\*API:\*\*\n ${res.match[1]}\n\*\*Response:\*\*\n\`\`\`json\n${resultDataBody}\n\`\`\``;
+            //     res.reply(resultBody);
+            // })
 
         }else if(res.match[2] === "post"){
             try{
                 postDataBody = prettier.format(res.match[3],{
                     parser: "json"
                 });
-                // codeBody = JSON.stringify(JSON.parse(res.match[1]), null, 2)
             }catch(e){
-                // console.log(e);
-                // console.log(codeBody);   
                 res.reply("请求数据出错，仅支持json格式：\n",e)
                 return ;
             }
-            robot
-            .http(res.match[1])
-            .timeout(10)
-            .header('accept', 'application/json')
-            .post(res.match[3])((err,resp,body)=>{
-                if(err){
-                    res.reply("请求发生错误：\n"+err);
-                }
-                console.log(resp.headers)
-                if(body.length > 10000){
-                    body = shorterDataFunc(body,res.reply);
-                }
-                let resultDataBody;
-                try{
-                    resultDataBody = prettier.format(body);
-                }catch(reqE){
-                    console.log("返回数据格式化出错：\n",reqE)
-                }
-                resultBody = `\*\*API:\*\*\n ${res.match[1]}\n\*\*Request:\*\* \n\`\`\`json\n${postDataBody}\n\`\`\`\n\*\*Response\*\*: \n\`\`\`json\n${resultDataBody}\n\`\`\``;
-                res.reply(resultBody);
+            // robot
+            // .http(res.match[1])
+            // .header('accept', 'application/json')
+            // .timeout(100)
+            // .post(res.match[3])((err,resp,body)=>{
+            //     if(err){
+            //         res.reply("请求发生错误：\n"+err);
+            //     }
+            //     console.log(resp.headers)
+            //     if(body.length > 10000){
+            //         body = shorterDataFunc(body,res.reply);
+            //     }
+            //     let resultDataBody;
+            //     try{
+            //         resultDataBody = prettier.format(body);
+            //     }catch(reqE){
+            //         console.log("返回数据格式化出错：\n",reqE)
+            //     }
+            //     resultBody = `\*\*API:\*\*\n ${res.match[1]}\n\*\*Request:\*\* \n\`\`\`json\n${postDataBody}\n\`\`\`\n\*\*Response\*\*: \n\`\`\`json\n${resultDataBody}\n\`\`\``;
+            //     res.reply(resultBody);
 
-            })
+            // })
         }
 
     })
