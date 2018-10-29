@@ -11,7 +11,7 @@ const shorterDataFunc = require('../src/shorterDataFunc');
 const FormData = require('form-data');
 const axios = require('axios');
 const axiosJSON = axios.create({
-    timeout: 10000,
+    timeout: 15000,
     responseType:'json',
     headers: {
     },
@@ -184,7 +184,7 @@ module.exports = (robot)=>{
         if(!res.match[1]){
             res.reply("api地址错误");
         }
-        let resultBody,postDataBody;
+        let postDataBody;
 
         if(res.match[2] === "get"){
             axiosJSON.get(res.match[1])
@@ -224,31 +224,6 @@ module.exports = (robot)=>{
                     res.reply("请求错误:",error.response.status);
                 }
             })
-
-            // robot
-            // .http(res.match[1])
-            // .header('accept', 'application/json')
-            // .timeout(100)
-            // .get()((err,resp,body)=>{
-            //     if(err){
-            //         res.reply("请求发生错误：:\n"+err);
-            //     }
-            //     console.log(resp.headers)
-            //     if(body.length > 10000){
-            //         body = shorterDataFunc(body,res.reply);
-            //     }
-            //     let resultDataBody;
-            //     try{
-            //         resultDataBody = prettier.format(body,{
-            //             parser: "json"
-            //         });
-            //     }catch(reqE){
-            //         console.log("返回数据格式化出错，目前仅支持json格式：\n",reqE)
-            //     }
-            //     resultBody = `\*\*API:\*\*\n ${res.match[1]}\n\*\*Response:\*\*\n\`\`\`json\n${resultDataBody}\n\`\`\``;
-            //     res.reply(resultBody);
-            // })
-
         }else if(res.match[2] === "post"){
             try{
                 postDataBody = prettier.format(res.match[3],{
@@ -295,28 +270,6 @@ module.exports = (robot)=>{
                     res.reply("请求错误:",error.response.status);
                 }
             })
-            // robot
-            // .http(res.match[1])
-            // .header('accept', 'application/json')
-            // .timeout(100)
-            // .post(res.match[3])((err,resp,body)=>{
-            //     if(err){
-            //         res.reply("请求发生错误：\n"+err);
-            //     }
-            //     console.log(resp.headers)
-            //     if(body.length > 10000){
-            //         body = shorterDataFunc(body,res.reply);
-            //     }
-            //     let resultDataBody;
-            //     try{
-            //         resultDataBody = prettier.format(body);
-            //     }catch(reqE){
-            //         console.log("返回数据格式化出错：\n",reqE)
-            //     }
-            //     resultBody = `\*\*API:\*\*\n ${res.match[1]}\n\*\*Request:\*\* \n\`\`\`json\n${postDataBody}\n\`\`\`\n\*\*Response\*\*: \n\`\`\`json\n${resultDataBody}\n\`\`\``;
-            //     res.reply(resultBody);
-
-            // })
         }
 
     })
