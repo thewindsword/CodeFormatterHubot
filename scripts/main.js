@@ -11,7 +11,7 @@ const shorterDataFunc = require('../src/shorterDataFunc');
 const FormData = require('form-data');
 const axios = require('axios');
 const axiosJSON = axios.create({
-    timeout: 1000,
+    timeout: 10000,
     responseType:'json',
     headers: {
     },
@@ -189,8 +189,10 @@ module.exports = (robot)=>{
         if(res.match[2] === "get"){
             axiosJSON.get(res.match[1])
             .then((response)=>{
-                console.log("header:",response.headers);
-                console.log("data:",response.data);
+                console.log("header:", response.headers);
+                console.log("data:", response.data);
+                let body = response.data;
+                console.log(typeof body);
             })
             .catch((error)=>{
                 if (!error.response) {
