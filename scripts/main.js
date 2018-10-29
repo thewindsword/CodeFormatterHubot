@@ -190,8 +190,8 @@ module.exports = (robot)=>{
             axiosJSON.get(res.match[1])
             .then((response)=>{
                 let resultDataBody,resultBody;
-                console.log("header:", response.headers);
-                console.log("data:", response.data);
+                // console.log("header:", response.headers);
+                // console.log("data:", response.data);
                 if(/application\/json/.test(response.headers['content-type'])){
                     // JSON 格式数据
                     if(+response.headers['content-length'] > 10000){
@@ -199,12 +199,18 @@ module.exports = (robot)=>{
                     }else{
                         resultDataBody = response.data
                     }
+                    try{
+                        resultDataBody = prettier.format(JSON.stringify(resultDataBody),{
+                            parser: "json"
+                        });
+                    }catch(reqE){
+                        console.log("返回数据格式化出错，目前仅支持json格式：\n",reqE)
+                    }
                     resultBody = `\*\*API:\*\*\n ${res.match[1]}\n\*\*Response:\*\*\n\`\`\`json\n${resultDataBody}\n\`\`\``;
                     res.reply(resultBody);
                 }else{
                     res.reply("不支持该返回类型");
                 }
-                console.log(typeof body);
             })
             .catch((error)=>{
                 if (!error.response) {
@@ -248,6 +254,39 @@ module.exports = (robot)=>{
                 res.reply("请求数据出错，仅支持json格式：\n",e)
                 return ;
             }
+            axiosJSON.post(res.match[1],JSON.parse(postDataBody))
+            .then((response)=>{
+                let resultDataBody,resultBody;
+                // console.log("header:", response.headers);
+                // console.log("data:", response.data);
+                if(/application\/json/.test(response.headers['content-type'])){
+                    // JSON 格式数据
+                    if(+response.headers['content-length'] > 10000){
+                        resultDataBody = shorterDataFunc(response.data,res.reply);
+                    }else{
+                        resultDataBody = response.data
+                    }
+                    try{
+                        resultDataBody = prettier.format(JSON.stringify(resultDataBody),{
+                            parser: "json"
+                        });
+                    }catch(reqE){
+                        console.log("返回数据格式化出错，目前仅支持json格式：\n",reqE)
+                    }
+                    resultBody = `\*\*API:\*\*\n ${res.match[1]}\n\*\*Request:\*\* \n\`\`\`json\n${postDataBody}\n\`\`\`\n\*\*Response\*\*: \n\`\`\`json\n${resultDataBody}\n\`\`\``;
+                    res.reply(resultBody);
+                }else{
+                    res.reply("不支持该返回类型");
+                }
+            })
+            .catch((error)=>{
+                if (!error.response) {
+                    res.reply("请求错误:",error.message);
+                    // console.log('Error', error.message);
+                    return;
+                }
+                res.reply("请求错误:",error.response);
+            })
             // robot
             // .http(res.match[1])
             // .header('accept', 'application/json')
