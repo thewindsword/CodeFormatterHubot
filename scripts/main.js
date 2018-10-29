@@ -229,6 +229,8 @@ module.exports = (robot)=>{
     robot.respond(/test getFile$/,(res)=>{
         let vchannel_id,text,attachments;
 
+        console.log(res.message);
+
         vchannel_id = res.envelope.room.vchannel_id;
 
         bearyChatTools.sendFile(vchannel_id);

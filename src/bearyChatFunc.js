@@ -4,6 +4,7 @@ const token = process.env.HUBOT_BEARYCHAT_TOKENS;
 
 module.exports = {
     sendFile: (id)=>{
+        console.log('vchannel_id:'+id);
         bearychat.message.create({
             token,
             vchannel_id: id,
