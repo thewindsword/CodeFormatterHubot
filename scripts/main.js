@@ -174,7 +174,11 @@ module.exports = (robot)=>{
         let resultBody,postDataBody;
 
         if(res.match[2] === "get"){
-            robot.http(res.match[1]).get()((err,resp,body)=>{
+            robot
+            .http(res.match[1])
+            .timeout(30000)
+            .header('accept', 'application/json')
+            .get()((err,resp,body)=>{
                 if(err){
                     res.reply("请求发生错误：:\n"+e);
                 }
@@ -204,7 +208,11 @@ module.exports = (robot)=>{
                 res.reply("请求数据出错，仅支持json格式：\n",e)
                 return ;
             }
-            robot.http(res.match[1]).post(res.match[3])((err,resp,body)=>{
+            robot
+            .http(res.match[1])
+            .timeout(30000)
+            .header('accept', 'application/json')
+            .post(res.match[3])((err,resp,body)=>{
                 if(err){
                     res.reply("请求发生错误：\n"+e);
                 }
