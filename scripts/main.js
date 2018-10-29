@@ -227,10 +227,11 @@ module.exports = (robot)=>{
     })
 
     robot.respond(/test getFile$/,(res)=>{
-        console.log(res);
-        res.send(JSON.stringify(res));
-        // let message = bearyChatTools.sendFile();
-        // res.send(message);
+        let vchannel_id,text,attachments;
+
+        vchannel_id = res.envelope.room.vchannel_id;
+
+        bearyChatTools.sendFile(vchannel_id);
     })
 
     robot.respond(/\-\-help$/,(res)=>{

@@ -3,13 +3,14 @@ const bearychat = require('bearychat');
 const token = process.env.HUBOT_BEARYCHAT_TOKENS;
 
 module.exports = {
-    sendFile: ()=>{
-        console.log(process.env);
-        console.log(token);
-
-        bearychat.rtm.start({
+    sendFile: (id)=>{
+        bearychat.message.create({
             token,
-        }).then(resp=>resp.json())
-        .then(data=>console.log(data))
+            vchannel_id: id,
+            text: "中午吃啥啊",
+            attachments: ["中午吃什么？"]
+
+        }).then(resp => resp.json())
+        .then(data => console.log(data));
     }    
 }
