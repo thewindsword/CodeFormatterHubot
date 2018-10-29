@@ -216,6 +216,7 @@ module.exports = (robot)=>{
                 console.log('Error', error);
                 if (!error.response) {
                     res.reply("请求错误:",error.message);
+                    return;
                 }
                 if(error.response && error.respond.data){
                     res.reply("请求错误:",error.response.data);
@@ -268,6 +269,7 @@ module.exports = (robot)=>{
             .catch((error)=>{
                 if (!error.response) {
                     res.reply("请求错误:",error.message);
+                    return;
                 }
                 if(error.response && error.respond.data){
                     res.reply("请求错误:",error.response.data);
