@@ -10,6 +10,8 @@ const shorterDataFunc = require('../src/shorterDataFunc');
 
 const FormData = require('form-data');
 const axios = require('axios');
+var CancelToken = axios.CancelToken;
+
 // const axiosJSON = axios.create()
 
 
@@ -165,7 +167,10 @@ module.exports = (robot)=>{
         })
     })
     robot.respond(/api:\s?(\S*) method:\s?(get|post)\s?(\{.*\})?/,(res)=>{
-        
+        let source = CancelToken.source();
+        setTimeout(()=>{
+            source.cancel();
+        },15000)
         res.send("接收到API生成请求!");
         if(!res.match[2]){
             res.reply("method仅支持get与post！（注意大小写）");
@@ -185,6 +190,7 @@ module.exports = (robot)=>{
                     'content-type': 'application/json'
                 },
                 maxContentLength: 15000,
+                cancelToken: source.token,
             })
             .then((response)=>{
                 let resultDataBody,resultBody;
@@ -241,6 +247,7 @@ module.exports = (robot)=>{
                     'content-type': 'application/json'
                 },
                 maxContentLength: 5096,
+                cancelToken: source.token,
             })
             .then((response)=>{
                 let resultDataBody,resultBody;
