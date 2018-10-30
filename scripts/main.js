@@ -312,7 +312,7 @@ module.exports = (robot)=>{
             let result = [],resultData = '查询最近api信息为：';
             let apiCatch = /api:\s?(\S*) method:\s?(get|post)/;
             data.messages.forEach(messageItem=>{
-                if(/(?!\@bot)\s?api:/.test(messageItem.text)){
+                if(/api:/.test(messageItem.text) && !/api:API地址/.test(messageItem.text)){
                     let [apiURL,apiMethod] = apiCatch.exec(messageItem.text).slice(1,3);
                     messageItem.apiURL = apiURL.trim();
                     messageItem.apiMethod = apiMethod.trim();
