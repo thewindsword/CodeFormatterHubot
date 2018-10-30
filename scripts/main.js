@@ -183,13 +183,13 @@ module.exports = (robot)=>{
         if(res.match[2] === "get"){
             axios
             .get(res.match[1],{
-                timeout: 10000,
+                timeout: 10*1000,
                 responseType:'json',
                 headers: {
                     'Accept': 'application/json',
                     'content-type': 'application/json'
                 },
-                maxContentLength: 15000,
+                maxContentLength: 50000,
                 cancelToken: source.token,
             })
             .then((response)=>{
@@ -210,7 +210,8 @@ module.exports = (robot)=>{
                             parser: "json"
                         });
                     }catch(reqE){
-                        console.log("返回数据格式化出错，目前仅支持json格式：\n",reqE)
+                        console.log("返回数据格式化出错，目前仅支持json格式：\n",reqE);
+                        
                     }
                     resultBody = `\*\*API:\*\*\n ${res.match[1]}\n\*\*Response:\*\*\n\`\`\`json\n${resultDataBody}\n\`\`\``;
                     res.reply(resultBody);
@@ -222,9 +223,10 @@ module.exports = (robot)=>{
                 console.log('Error', error);
                 if (!error.response) {
                     res.reply("请求错误:",error.message);
+                    source.cancel();
                     return;
                 }
-                if(error.response && error.respond.data){
+                if(error.response && error.response.data){
                     res.reply("请求错误:",error.response.data);
                 }else{
                     res.reply("请求错误:",error.response.status);
@@ -240,13 +242,13 @@ module.exports = (robot)=>{
                 return ;
             }
             axios.post(res.match[1],JSON.parse(postDataBody),{
-                timeout: 10000,
+                timeout: 10*1000,
                 responseType:'json',
                 headers: {
                     'Accept': 'application/json',
                     'content-type': 'application/json'
                 },
-                maxContentLength: 5096,
+                maxContentLength: 50000,
                 cancelToken: source.token,
             })
             .then((response)=>{
@@ -276,9 +278,10 @@ module.exports = (robot)=>{
             .catch((error)=>{
                 if (!error.response) {
                     res.reply("请求错误:",error.message);
+                    source.cancel();
                     return;
                 }
-                if(error.response && error.respond.data){
+                if(error.response && error.response.data){
                     res.reply("请求错误:",error.response.data);
                 }else{
                     res.reply("请求错误:",error.response.status);
