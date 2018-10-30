@@ -311,7 +311,17 @@ module.exports = (robot)=>{
         vchannel_id = res.message.room.vchannelId;
 
         let data = bearyChatTools.sendFile(vchannel_id);
-        console.log(data);
+        data.then(data=>{
+            let result = [];
+            console.log(data);
+            res.reply(data);
+            data.message.forEach(messageItem=>{
+                if(/api:/.test(messageItem.text)){
+                    result.push(messageItem);
+                }
+            });
+            console.log(result);
+        })
     })
 
     robot.respond(/\-\-help$/,(res)=>{
