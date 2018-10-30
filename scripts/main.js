@@ -305,13 +305,10 @@ module.exports = (robot)=>{
     robot.respond(/test getFile$/,(res)=>{
         let vchannel_id,text,attachments;
 
-        console.log(res.message.room);
-
         vchannel_id = res.message.room.vchannelId;
 
         let data = bearyChatTools.sendFile(vchannel_id);
         data.then(data=>{
-            console.log(data);
             let result = [],resultData = '查询最近api信息为：';
             let apiCatch = /api:\s?(\S*) method:\s?(get|post)/;
             data.messages.forEach(messageItem=>{
