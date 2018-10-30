@@ -46,7 +46,7 @@ module.exports = (robot)=>{
         try{
             codeType = res.match[1];
             if(fileParser){
-                codeBody = prettier.format(prepareToWrite,{
+                codeBody = prettier.format(res.match[2],{
                     parser: fileParser
                 });
             }else{
