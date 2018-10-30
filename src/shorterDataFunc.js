@@ -21,6 +21,7 @@ module.exports = (body,res)=>{
 }
 
 function simpleObj(objectData){
+    console.log('objectData:',JSON.stringify(objectData));
     let keys = Object.keys(objectData),result = {};
 
     keys.forEach(keyName=>{
@@ -32,6 +33,6 @@ function simpleObj(objectData){
             result[keys] = objectData[keyName];
         }
     })
-
+    console.log("result",JSON.stringify(result));
     return result;
 }
