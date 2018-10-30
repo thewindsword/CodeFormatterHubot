@@ -26,11 +26,11 @@ function simpleObj(objectData){
 
     keys.forEach(keyName=>{
         if(Array.isArray(objectData[keyName])){
-            result[keys] = objectData[keyName].slice(0,1);
+            result[keyName] = objectData[keyName].slice(0,1);
         }else if(typeof objectData[keyName] === "object" && objectData[keyName] !== null){
-            result[keys] = "Object"
+            result[keyName] = "Object"
         }else{
-            result[keys] = objectData[keyName];
+            result[keyName] = objectData[keyName];
         }
     })
     console.log("result",JSON.stringify(result));
