@@ -302,7 +302,7 @@ module.exports = (robot)=>{
 
     })
 
-    robot.respond(/test getFile$/,(res)=>{
+    robot.respond(/api\-history$/,(res)=>{
         let vchannel_id,text,attachments;
 
         vchannel_id = res.message.room.vchannelId;
