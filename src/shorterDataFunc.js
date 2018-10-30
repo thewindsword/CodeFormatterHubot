@@ -27,7 +27,11 @@ function simpleObj(objectData){
         if(Array.isArray(objectData[keyName])){
             result[keyName] = objectData[keyName].slice(0,1);
         }else if(typeof objectData[keyName] === "object" && objectData[keyName] !== null){
-            result[keyName] = "Object"
+            if(JSON.stringify(objectData[keyName]).length > 1000){
+                result[keyName] = "Object"
+            }else{
+                result[keyName] = objectData[keyName];
+            }
         }else{
             result[keyName] = objectData[keyName];
         }
