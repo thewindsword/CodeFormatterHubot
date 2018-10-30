@@ -312,7 +312,7 @@ module.exports = (robot)=>{
             let result = [],resultData = '查询最近api信息为：';
             let apiCatch = /api:\s?(\S*) method:\s?(get|post)/;
             data.messages.forEach(messageItem=>{
-                if(/api:/.test(messageItem.text)){
+                if(/(?!\@bot)\s?api:/.test(messageItem.text)){
                     let [apiURL,apiMethod] = apiCatch.exec(messageItem.text).slice(1,3);
                     messageItem.apiURL = apiURL.trim();
                     messageItem.apiMethod = apiMethod.trim();
@@ -348,17 +348,12 @@ module.exports = (robot)=>{
 5. @bot api:API地址 method:get/post 数据
         `);
     })
-//     robot.listen((message)=>{
-//         console.log(message);
-//     },(res)=>{
-//         res.send(`用法列表：
-// 1. 输入 {JSON数据} 将会自动返回格式化的JSON数据
-// 2. @bot t:语言 代码片段
-// 3. @bot img t:语言 代码片段
-// 4. @bot img clear 清除服务器缓存（将删除过往图片）
-// 5. @bot api:API地址 method:get/post 数据
-//         `);
-//     })
+    // robot.listen((message)=>{
+    //     console.log(message);
+    //     return message.text;
+    // },(res)=>{
+    //     console.log(res.match);
+    // })
     // robot.error((err,res)=>{
     //     if(res){
     //         res.reply("DOES NOT COMPUTE");
