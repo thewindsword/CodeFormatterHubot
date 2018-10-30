@@ -206,12 +206,11 @@ module.exports = (robot)=>{
                         resultDataBody = response.data
                     }
                     try{
-                        resultDataBody = prettier.format(JSON.stringify(resultDataBody),{
+                        resultDataBody = prettier.format(resultDataBody,{
                             parser: "json"
                         });
                     }catch(reqE){
                         console.log("返回数据格式化出错，目前仅支持json格式：\n",reqE);
-                        
                     }
                     resultBody = `\*\*API:\*\*\n ${res.match[1]}\n\*\*Response:\*\*\n\`\`\`json\n${resultDataBody}\n\`\`\``;
                     res.reply(resultBody);
