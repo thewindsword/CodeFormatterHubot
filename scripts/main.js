@@ -311,22 +311,21 @@ module.exports = (robot)=>{
         vchannel_id = res.message.room.vchannelId;
 
         let data = bearyChatTools.sendFile(vchannel_id);
-        data.then(data=>{
-            console.log(data);
-            let result = [],resultData = '查询最近api信息为：';
-            let apiCatch = /api:\s?(\S*) method:\s?(get|post)/;
-            data.message.forEach(messageItem=>{
-                if(/api:/.test(messageItem.text)){
-                    let [apiURL,apiMethod] = apiCatch.exec(messageItem.text).slice(1,3);
-                    messageItem.apiURL = apiURL.trim();
-                    messageItem.apiMethod = apiMethod.trim();
-                    result.push(messageItem);
-                }
-            });
-            res.reply(result.reduce((messageString,messageItem,resultData)=>{
-                messageString += `\n\[${messageItem.apiMethod}\][${messageItem.apiURL}](messageItem.apiURL)`
-            }));
-        })
+        console.log(data);
+        let result = [],resultData = '查询最近api信息为：';
+        let apiCatch = /api:\s?(\S*) method:\s?(get|post)/;
+        data.message.forEach(messageItem=>{
+            if(/api:/.test(messageItem.text)){
+                let [apiURL,apiMethod] = apiCatch.exec(messageItem.text).slice(1,3);
+                messageItem.apiURL = apiURL.trim();
+                messageItem.apiMethod = apiMethod.trim();
+                result.push(messageItem);
+            }
+        });
+        res.reply(result.reduce((messageString,messageItem)=>{
+            messageString += `\n\[${messageItem.apiMethod}\][${messageItem.apiURL}](messageItem.apiURL)`
+        }),resultData);
+        
     })
 
     robot.respond(/\-\-help$/,(res)=>{
