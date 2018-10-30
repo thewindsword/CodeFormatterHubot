@@ -189,7 +189,7 @@ module.exports = (robot)=>{
                     'Accept': 'application/json',
                     'content-type': 'application/json'
                 },
-                maxContentLength: 50000,
+                maxContentLength: 1048576,
                 cancelToken: source.token,
             })
             .then((response)=>{
@@ -248,7 +248,7 @@ module.exports = (robot)=>{
                     'Accept': 'application/json',
                     'content-type': 'application/json'
                 },
-                maxContentLength: 50000,
+                maxContentLength: 1048576,
                 cancelToken: source.token,
             })
             .then((response)=>{
