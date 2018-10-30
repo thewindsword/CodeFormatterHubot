@@ -53,7 +53,7 @@ module.exports = (robot)=>{
                 codeBody = prettier.format(res.match[2]);
             }
         }catch(e){
-            // console.log(e);
+            console.log(e);
             // console.log(codeBody);  
         }
         if(!codeBody){
