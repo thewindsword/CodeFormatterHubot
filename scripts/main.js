@@ -169,7 +169,6 @@ module.exports = (robot)=>{
     robot.respond(/api:\s?(\S*) method:\s?(get|post)\s?(\{.*\})?/,(res)=>{
         let source = CancelToken.source();
         setTimeout(()=>{
-            res.reply("请求超时");
             source.cancel();
         },10000)
         res.send("接收到API生成请求!");
@@ -327,7 +326,7 @@ module.exports = (robot)=>{
                 res.send(resultData+"无");
             }else{
                 res.send(result.reduce((messageString,messageItem,index)=>{
-                    messageString += `\n${index}. \[${messageItem.apiMethod}\][${messageItem.apiURL}](messageItem.apiURL)`;
+                    messageString += `\n${index+1}. \[${messageItem.apiMethod}\][${messageItem.apiURL}](messageItem.apiURL)`;
                     return messageString;
                 },resultData));
             }
