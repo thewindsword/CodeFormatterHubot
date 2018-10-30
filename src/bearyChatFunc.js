@@ -26,9 +26,6 @@ module.exports = {
                     limit: 10,
                 }
             }
-        }).then(resp => resp.json())
-        .then(data => {
-            return data;
-        });
+        }).then(resp => resp.json());
     }    
 }
