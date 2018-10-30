@@ -323,9 +323,14 @@ module.exports = (robot)=>{
                     result.push(messageItem);
                 }
             });
-            res.reply(result.reduce((messageString,messageItem)=>{
-                messageString += `\n\[${messageItem.apiMethod}\][${messageItem.apiURL}](messageItem.apiURL)`
-            }),resultData);
+            if(result.length === 0){
+                res.reply(resultData+"无")
+            }else{
+                res.reply(result.reduce((messageString,messageItem,index)=>{
+                    messageString += `\n${index}. \[${messageItem.apiMethod}\][${messageItem.apiURL}](messageItem.apiURL)`;
+                    return messageString;
+                }),resultData);
+            }
         })
     })
 
