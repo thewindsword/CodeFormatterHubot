@@ -8,19 +8,19 @@ module.exports = (body,res)=>{
         return;
     }
     if(Array.isArray(simpleJson)){
-        console.log("Array");
+        // console.log("Array");
         body = simpleJson.slice(0,1).map(item => {
             simpleObj(item)
         });
     }else{
-        console.log("Object");
+        // console.log("Object");
         body = simpleObj(simpleJson);
     }
     return body;
 }
 
 function simpleObj(objectData){
-    console.log('objectData:\n',JSON.stringify(objectData));
+    // console.log('objectData:\n',JSON.stringify(objectData));
     let keys = Object.keys(objectData),result = {};
 
     keys.forEach(keyName=>{
@@ -32,6 +32,6 @@ function simpleObj(objectData){
             result[keyName] = objectData[keyName];
         }
     })
-    console.log("result\n",JSON.stringify(result));
+    // console.log("result\n",JSON.stringify(result));
     return result;
 }

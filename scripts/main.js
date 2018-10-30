@@ -206,6 +206,7 @@ module.exports = (robot)=>{
                         resultDataBody = response.data
                     }
                     try{
+                        console.log(JSON.stringify(resultDataBody));
                         resultDataBody = prettier.format(JSON.stringify(resultDataBody),{
                             parser: "json"
                         });
