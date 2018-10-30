@@ -169,7 +169,6 @@ module.exports = (robot)=>{
     robot.respond(/api:\s?(\S*) method:\s?(get|post)\s?(\{.*\})?/,(res)=>{
         let source = CancelToken.source();
         setTimeout(()=>{
-            res.reply("请求超时");
             source.cancel();
         },10000)
         res.send("接收到API生成请求!");
@@ -306,13 +305,10 @@ module.exports = (robot)=>{
     robot.respond(/test getFile$/,(res)=>{
         let vchannel_id,text,attachments;
 
-        console.log(res.message.room);
-
         vchannel_id = res.message.room.vchannelId;
 
         let data = bearyChatTools.sendFile(vchannel_id);
         data.then(data=>{
-            console.log(data);
             let result = [],resultData = '查询最近api信息为：';
             let apiCatch = /api:\s?(\S*) method:\s?(get|post)/;
             data.messages.forEach(messageItem=>{
@@ -327,7 +323,7 @@ module.exports = (robot)=>{
                 res.send(resultData+"无");
             }else{
                 res.send(result.reduce((messageString,messageItem,index)=>{
-                    messageString += `\n${index}. \[${messageItem.apiMethod}\][${messageItem.apiURL}](messageItem.apiURL)`;
+                    messageString += `\n${index+1}. \[${messageItem.apiMethod}\][${messageItem.apiURL}](messageItem.apiURL)`;
                     return messageString;
                 },resultData));
             }
