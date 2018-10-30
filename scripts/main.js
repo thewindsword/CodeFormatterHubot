@@ -323,7 +323,7 @@ module.exports = (robot)=>{
                 res.send(resultData+"无");
             }else{
                 res.send(result.reduce((messageString,messageItem,index)=>{
-                    messageString += `\n${index+1}. \[${messageItem.apiMethod}\][${messageItem.apiURL}](messageItem.apiURL)`;
+                    messageString += `\n${index+1}. \[${messageItem.apiMethod}\][${messageItem.apiURL}](${messageItem.apiURL})`;
                     return messageString;
                 },resultData));
             }
