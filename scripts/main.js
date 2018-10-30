@@ -8,6 +8,8 @@ const clearTempFunc = require('../src/clearTemp');
 const bearyChatTools = require('../src/bearyChatFunc');
 const shorterDataFunc = require('../src/shorterDataFunc');
 
+const { getFileExt } =  require('../src/utilsFunc');
+
 const FormData = require('form-data');
 const axios = require('axios');
 var CancelToken = axios.CancelToken;
@@ -40,9 +42,16 @@ module.exports = (robot)=>{
         res.reply("代码格式化处理中...")
         console.log('translate',res.match[0]);
         let codeType,codeBody;
+        let [,fileParser] = getFileExt(res.match[1]);
         try{
             codeType = res.match[1];
-            codeBody = prettier.format(res.match[2]);
+            if(fileParser){
+                codeBody = prettier.format(prepareToWrite,{
+                    parser: fileParser
+                });
+            }else{
+                codeBody = prettier.format(res.match[2]);
+            }
         }catch(e){
             // console.log(e);
             // console.log(codeBody);  
@@ -63,44 +72,7 @@ module.exports = (robot)=>{
             fileExt,
             fileParser,
             fileName = 'temp_'+stringHash(prepareToWrite);
-        switch(res.match[1]){
-            case "javascript":
-                fileExt = '.js';
-                break;
-            case "typescript":
-                fileExt = '.ts';
-                break;
-            case "css":
-                fileExt = '.css';
-                fileParser = 'css';
-                break;
-            case "scss":
-                fileExt = '.scss';
-                fileParser = 'scss';
-                break;
-            case "less":
-                fileExt = '.less';
-                fileParser = 'less';
-                break;
-            case "json":
-                fileExt = '.json';
-                fileParser = 'json';
-                break;
-            case "markdown":
-                fileExt = '.md';
-                fileParser = 'markdown';
-                break;
-            case "vue":
-                fileExt = '.vue';
-                fileParser = 'vue';
-                break;
-            case "yaml":
-                fileExt = '.yaml';
-                fileParser = 'yaml';
-                break;
-            default: 
-                fileExt = '.txt';
-        }
+        [fileExt,fileParser] = getFileExt(res.match[1]);
         try{
             if(fileParser){
                 prepareToWrite = prettier.format(prepareToWrite,{
