@@ -10,7 +10,7 @@ module.exports = (body,res)=>{
     if(Array.isArray(simpleJson)){
         // console.log("Array");
         body = simpleJson.slice(0,1).map(item => {
-            simpleObj(item)
+            return simpleObj(item)
         });
     }else{
         // console.log("Object");
