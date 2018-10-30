@@ -1,10 +1,10 @@
-module.exports = (body,reply)=>{
+module.exports = (body,res)=>{
     let simpleJson;
-    reply("返回数据过多，简化中");
+    res.reply("返回数据过多，简化中");
     try{
         simpleJson = body;
     }catch(parseE){
-        reply("数据解析失败:"+parseE);
+        res.reply("数据解析失败:"+parseE);
         return;
     }
     if(Array.isArray(simpleJson)){
