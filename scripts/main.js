@@ -206,11 +206,13 @@ module.exports = (robot)=>{
                         resultDataBody = response.data
                     }
                     try{
-                        console.log(resultDataBody);
-                        console.log(JSON.stringify(resultDataBody));
-                        resultDataBody = prettier.format(JSON.stringify(resultDataBody),{
-                            parser: "json"
-                        });
+                        if(typeof resultDataBody !== 'object'){
+                            
+                        }else{
+                            resultDataBody = prettier.format(JSON.stringify(resultDataBody),{
+                                parser: "json"
+                            });
+                        }
                     }catch(reqE){
                         console.log("返回数据格式化出错，目前仅支持json格式：\n",reqE);
                     }
@@ -235,11 +237,15 @@ module.exports = (robot)=>{
             })
         }else if(res.match[2] === "post"){
             try{
-                postDataBody = prettier.format(res.match[3],{
-                    parser: "json"
-                });
+                if(!res.match[3]){
+                    postDataBody = "{}"
+                }else{
+                    postDataBody = prettier.format(res.match[3],{
+                        parser: "json"
+                    });
+                }
             }catch(e){
-                res.reply("请求数据出错，仅支持json格式：\n",e)
+                res.reply("POST数据出错，仅支持json格式：\n",e)
                 return ;
             }
             axios.post(res.match[1],JSON.parse(postDataBody),{
@@ -264,9 +270,13 @@ module.exports = (robot)=>{
                         resultDataBody = response.data
                     }
                     try{
-                        resultDataBody = prettier.format(JSON.stringify(resultDataBody),{
-                            parser: "json"
-                        });
+                        if(typeof resultDataBody !== 'object'){
+                            
+                        }else{
+                            resultDataBody = prettier.format(JSON.stringify(resultDataBody),{
+                                parser: "json"
+                            });
+                        }
                     }catch(reqE){
                         console.log("返回数据格式化出错，目前仅支持json格式：\n",reqE)
                     }
