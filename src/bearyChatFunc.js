@@ -23,7 +23,7 @@ module.exports = {
             vchannel_id: id,
             query: {
                 latest: {
-                    limit: 10,
+                    limit: 50,
                 }
             }
         }).then(resp => resp.json());
