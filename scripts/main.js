@@ -201,6 +201,7 @@ module.exports = (robot)=>{
                 if(/application\/json/.test(response.headers['content-type'])){
                     // JSON 格式数据
                     if(+response.headers['content-length'] > 10000){
+                        console.log(response.data);
                         resultDataBody = shorterDataFunc(response.data,res);
                     }else{
                         resultDataBody = response.data
