@@ -169,6 +169,7 @@ module.exports = (robot)=>{
     robot.respond(/api:\s?(\S*) method:\s?(get|post)\s?(\{.*\})?/,(res)=>{
         let source = CancelToken.source();
         setTimeout(()=>{
+            res.reply("请求超时");
             source.cancel();
         },10000)
         res.send("接收到API生成请求!");
@@ -309,7 +310,8 @@ module.exports = (robot)=>{
 
         vchannel_id = res.message.room.vchannelId;
 
-        bearyChatTools.sendFile(vchannel_id);
+        let data = bearyChatTools.sendFile(vchannel_id);
+        console.log(data);
     })
 
     robot.respond(/\-\-help$/,(res)=>{
