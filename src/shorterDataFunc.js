@@ -8,10 +8,12 @@ module.exports = (body,res)=>{
         return;
     }
     if(Array.isArray(simpleJson)){
+        console.log("数组");
         body = JSON.stringify(simpleJson.slice(0,1).map(item => {
             simpleObj(item)
         }));
     }else{
+        console.log("对象");
         body = JSON.stringify(simpleObj(simpleJson));
     }
 
