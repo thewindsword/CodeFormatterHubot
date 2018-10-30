@@ -18,7 +18,7 @@ module.exports = {
 
         // }).then(resp => resp.json())
         // .then(data => console.log(data));
-        await bearychat.message.query({
+        return await bearychat.message.query({
             token,
             vchannel_id: id,
             query: {
