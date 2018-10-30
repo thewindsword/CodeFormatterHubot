@@ -206,7 +206,7 @@ module.exports = (robot)=>{
                         resultDataBody = response.data
                     }
                     try{
-                        resultDataBody = prettier.format(resultDataBody,{
+                        resultDataBody = prettier.format(JSON.stringify(resultDataBody),{
                             parser: "json"
                         });
                     }catch(reqE){
@@ -262,7 +262,7 @@ module.exports = (robot)=>{
                         resultDataBody = response.data
                     }
                     try{
-                        resultDataBody = prettier.format(resultDataBody,{
+                        resultDataBody = prettier.format(JSON.stringify(resultDataBody),{
                             parser: "json"
                         });
                     }catch(reqE){
