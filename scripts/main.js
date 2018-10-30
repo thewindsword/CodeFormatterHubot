@@ -40,9 +40,9 @@ module.exports = (robot)=>{
     })
     robot.respond(/t:([a-z|A-Z]+) ([\d\D]*)/,(res)=>{
         res.reply("代码格式化处理中...")
-        console.log('translate',res.match[0]);
         let codeType,codeBody;
         let [,fileParser] = getFileExt(res.match[1]);
+        console.log(fileParser);
         try{
             codeType = res.match[1];
             if(fileParser){
