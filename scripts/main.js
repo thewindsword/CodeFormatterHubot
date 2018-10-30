@@ -320,16 +320,13 @@ module.exports = (robot)=>{
                     let [apiURL,apiMethod] = apiCatch.exec(messageItem.text).slice(1,3);
                     messageItem.apiURL = apiURL.trim();
                     messageItem.apiMethod = apiMethod.trim();
+                    console.log(apiURL);
                     result.push(messageItem);
                 }
             });
             if(result.length === 0){
                 res.send(resultData+"无");
             }else{
-                console.log(result.reduce((messageString,messageItem,index)=>{
-                    messageString += `\n${index}. \[${messageItem.apiMethod}\][${messageItem.apiURL}](messageItem.apiURL)`;
-                    return messageString;
-                }),resultData)
                 res.send(result.reduce((messageString,messageItem,index)=>{
                     messageString += `\n${index}. \[${messageItem.apiMethod}\][${messageItem.apiURL}](messageItem.apiURL)`;
                     return messageString;
