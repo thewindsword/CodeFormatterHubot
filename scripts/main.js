@@ -320,7 +320,7 @@ module.exports = (robot)=>{
                     result.push(messageItem);
                 }
             });
-            console.log(result);
+            console.log(result)
         })
     })
 
