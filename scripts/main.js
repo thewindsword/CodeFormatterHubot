@@ -313,7 +313,11 @@ module.exports = (robot)=>{
             let apiCatch = /api:\s?(\S*) method:\s?(get|post)/;
             data.messages.forEach(messageItem=>{
                 if(/api:/.test(messageItem.text) && !/api:API地址/.test(messageItem.text)){
-                    let [apiURL,apiMethod] = apiCatch.exec(messageItem.text).slice(1,3);
+                    let isCatch = apiCatch.exec(messageItem.text);
+                    if(!isCatch){
+                        return;
+                    }
+                    let [apiURL,apiMethod] = isCatch.slice(1,3);
                     messageItem.apiURL = apiURL.trim();
                     messageItem.apiMethod = apiMethod.trim();
                     result.push(messageItem);
