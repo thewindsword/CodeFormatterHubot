@@ -323,14 +323,14 @@ module.exports = (robot)=>{
                 res.send(resultData+"无");
             }else{
                 res.send(result.reduce((messageString,messageItem,index)=>{
-                    messageString += `\n${index+1}. \[${messageItem.apiMethod}\][${messageItem.apiURL}](messageItem.apiURL)`;
+                    messageString += `\n${index+1}. \[${messageItem.apiMethod}\][${messageItem.apiURL}](${messageItem.apiURL})`;
                     return messageString;
                 },resultData));
             }
         })
     })
 
-    robot.respond(/\-\-help$/,(res)=>{
+    robot.respond(/\-?\-?help$/,(res)=>{
         res.send(`用法列表：
 1. 输入 {JSON数据} 将会自动返回格式化的JSON数据
 2. @bot t:语言 代码片段
@@ -348,4 +348,20 @@ module.exports = (robot)=>{
 5. @bot api:API地址 method:get/post 数据
         `);
     })
+//     robot.listen((message)=>{
+//         console.log(message);
+//     },(res)=>{
+//         res.send(`用法列表：
+// 1. 输入 {JSON数据} 将会自动返回格式化的JSON数据
+// 2. @bot t:语言 代码片段
+// 3. @bot img t:语言 代码片段
+// 4. @bot img clear 清除服务器缓存（将删除过往图片）
+// 5. @bot api:API地址 method:get/post 数据
+//         `);
+//     })
+    // robot.error((err,res)=>{
+    //     if(res){
+    //         res.reply("DOES NOT COMPUTE");
+    //     }
+    // })
 }
