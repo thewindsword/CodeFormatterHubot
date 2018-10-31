@@ -112,7 +112,19 @@ module.exports = (robot)=>{
                         res.reply("图片上传失败："+result.data.msg);
                     }
                     // console.log(result.data);
-                    res.reply(`![code](${result.data.data.url})`);
+
+                    robot.emit('bearychat.attachment', {
+                        message: res.message,
+                        text: 'CodeFormatter IMG',
+                        attachments: [
+                            {
+                                images: [
+                                    { url: result.data.data.url },
+                                ]
+                            }]
+                    })
+
+                    // res.reply(`![code](${result.data.data.url})`);
                 }).catch(er => res.reply("图片上传失败："+er));
                 
 
@@ -318,12 +330,14 @@ module.exports = (robot)=>{
     robot.respond(/\-h$/,(res)=>{
         res.send(helpText);
     })
-    // robot.listen((message)=>{
-    //     console.log(message);
-    //     return message.text;
-    // },(res)=>{
-    //     console.log(res.match);
-    // })
+    robot.listen((message)=>{
+        console.log(message);
+        if(message.text){
+            console.log(message.text);
+        }
+    },(res)=>{
+        // console.log(res.match);
+    })
     // robot.error((err,res)=>{
     //     if(res){
     //         res.reply("DOES NOT COMPUTE");
