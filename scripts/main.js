@@ -291,7 +291,7 @@ module.exports = (robot)=>{
             data.forEach(member=>{
                 // console.log(member.full_name);
                 if(member.full_name === "TinyBear" || member.name === "TinyBear"){
-                    console(member);
+                    console.log(member);
                     res.reply("@TinyBear https://i.loli.net/2018/10/31/5bd9606d9a78c.png");
                 }
             })
