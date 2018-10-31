@@ -292,7 +292,7 @@ module.exports = (robot)=>{
                 // console.log(member.full_name);
                 if(member.full_name === "TinyBear" || member.name === "TinyBear"){
                     console.log(member);
-                    res.reply("@<=#{"+member.id+"}=> https://i.loli.net/2018/10/31/5bd9606d9a78c.png");
+                    res.reply("@<="+member.id+"=> https://i.loli.net/2018/10/31/5bd9606d9a78c.png");
                 }
             })
         })
