@@ -8,7 +8,7 @@ const clearTempFunc = require('../src/clearTemp');
 const bearyChatTools = require('../src/bearyChatFunc');
 const shorterDataFunc = require('../src/shorterDataFunc');
 
-const { getFileExt } =  require('../src/utilsFunc');
+const { getFileExt,checkUserList } =  require('../src/utilsFunc');
 
 const FormData = require('form-data');
 const axios = require('axios');
@@ -283,7 +283,16 @@ module.exports = (robot)=>{
                 }
             })
         }
-
+    })
+    robot.respond(/img test/,(res)=>{
+        let userList = checkUserList();
+        userList.then(data=>{
+            data.forEach(member=>{
+                if(member.full_name === "TinyBear"){
+                    res.reply("@TinyBear https://i.loli.net/2018/10/31/5bd9606d9a78c.png");
+                }
+            })
+        })
     })
 
     robot.respond(/api\-history$/,(res)=>{

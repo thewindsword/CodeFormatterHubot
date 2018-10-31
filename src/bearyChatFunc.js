@@ -4,20 +4,6 @@ const token = process.env.HUBOT_BEARYCHAT_TOKENS;
 
 module.exports = {
     sendFile: async (id)=>{
-        // console.log('vchannel_id:'+id);
-        // bearychat.message.create({
-        //     token,
-        //     vchannel_id: id,
-        //     text: "中午吃啥啊",
-        //     attachments: [
-        //         {
-        //             color: "#ccc",
-        //             text: "中午吃什么？"
-        //         }
-        //     ]
-
-        // }).then(resp => resp.json())
-        // .then(data => console.log(data));
         return await bearychat.message.query({
             token,
             vchannel_id: id,
@@ -27,5 +13,10 @@ module.exports = {
                 }
             }
         }).then(resp => resp.json());
-    }    
+    },
+    checkUserList: async ()=>{
+        return await bearychat.user.list({
+            token
+        }).then(resp=>resp.json())
+    }
 }
