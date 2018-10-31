@@ -8,7 +8,7 @@ const clearTempFunc = require('../src/clearTemp');
 const bearyChatTools = require('../src/bearyChatFunc');
 const shorterDataFunc = require('../src/shorterDataFunc');
 
-const { getFileExt,checkUserList } =  require('../src/utilsFunc');
+const { getFileExt } =  require('../src/utilsFunc');
 
 const FormData = require('form-data');
 const axios = require('axios');
@@ -285,7 +285,7 @@ module.exports = (robot)=>{
         }
     })
     robot.respond(/img test/,(res)=>{
-        let userList = checkUserList();
+        let userList = bearyChatTools.checkUserList();
         userList.then(data=>{
             data.forEach(member=>{
                 if(member.full_name === "TinyBear"){
