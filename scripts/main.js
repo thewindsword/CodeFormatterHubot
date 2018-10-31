@@ -289,8 +289,9 @@ module.exports = (robot)=>{
         res.send("开始感应对接机器人的气息，开始寻找 TinyBear");
         userList.then(data=>{
             data.forEach(member=>{
-                console.log(member.full_name);
-                if(member.full_name === "TinyBear"){
+                // console.log(member.full_name);
+                if(member.full_name === "TinyBear" || member.name === "TinyBear"){
+                    console(member);
                     res.reply("@TinyBear https://i.loli.net/2018/10/31/5bd9606d9a78c.png");
                 }
             })
