@@ -284,7 +284,7 @@ module.exports = (robot)=>{
             })
         }
     })
-    robot.respond(/img test/,(res)=>{
+    robot.respond(/img\s?test$/,(res)=>{
         let userList = bearyChatTools.checkUserList();
         res.send("开始感应对接机器人的气息，开始寻找 TinyBear");
         userList.then(data=>{
