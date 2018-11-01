@@ -328,14 +328,23 @@ module.exports = (robot)=>{
             attachments: [
                 {
                     color: '#ffee44',
+                    text: "**今日宜：**",
+                },
+                {
+                    color: '#ffee44',
                     text: good,
-                },{
+                },
+                {
+                    color: '#ff4444',
+                    text: "**不宜：**",
+                },
+                {
                     color: '#ff4444',
                     text: bad,
                 },{
-                    text: `面向${todayCalendar.directions}写程序，BUG最少`
+                    text: `**座位朝向：** 面向${todayCalendar.directions}写程序，BUG最少`
                 },{
-                    text: `今日宜饮: ${todayCalendar.todayDrink}`
+                    text: `**今日宜饮：** ${todayCalendar.todayDrink}`
                 }
                 ]
         });
