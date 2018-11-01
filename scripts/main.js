@@ -314,7 +314,6 @@ module.exports = (robot)=>{
     // })
     robot.respond(/today$/,(res)=>{
         let todayCalendar = getProgrammerCalendar();
-        console.log(todayCalendar);
         let good = '',bad = '';
         todayCalendar.good.forEach(item=>{
             good+=`**${item.name}** ${item.good}\n`;
