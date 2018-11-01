@@ -7,6 +7,7 @@ const carbonFunc = require('../src/carbonExec');
 const clearTempFunc = require('../src/clearTemp');
 const bearyChatTools = require('../src/bearyChatFunc');
 const shorterDataFunc = require('../src/shorterDataFunc');
+const getProgrammerCalendar = require('../src/getProgrammerCalendar');
 
 const { getFileExt } =  require('../src/utilsFunc');
 
@@ -298,20 +299,47 @@ module.exports = (robot)=>{
             })
         }
     })
-    robot.respond(/img\s?test$/,(res)=>{
-        let userList = bearyChatTools.checkUserList();
-        res.send("开始感应对接机器人的气息，开始寻找 TinyBear");
-        userList.then(data=>{
-            data.forEach(member=>{
-                // console.log(member.full_name);
-                if(member.full_name === "TinyBear" || member.name === "TinyBear"){
-                    console.log(member);
-                    res.reply("@<="+member.id+"=> https://i.loli.net/2018/10/31/5bd9606d9a78c.png");
+    // robot.respond(/img\s?test$/,(res)=>{
+    //     let userList = bearyChatTools.checkUserList();
+    //     res.send("开始感应对接机器人的气息，开始寻找 TinyBear");
+    //     userList.then(data=>{
+    //         data.forEach(member=>{
+    //             // console.log(member.full_name);
+    //             if(member.full_name === "TinyBear" || member.name === "TinyBear"){
+    //                 console.log(member);
+    //                 res.reply("@<="+member.id+"=> https://i.loli.net/2018/10/31/5bd9606d9a78c.png");
+    //             }
+    //         })
+    //     })
+    // })
+    robot.respond(/today$/,(res)=>{
+        let todayCalendar = getProgrammerCalendar();
+        console.log(todayCalendar);
+        let good = '',bad = '';
+        todayCalendar.good.forEach(item=>{
+            good+=`**${item.name}** ${item.good}\n`;
+        });
+        todayCalendar.bad.forEach(item=>{
+            bad+=`**${item.name}** ${item.bad}\n`;
+        });
+        robot.emit('bearychat.attachment', {
+            message: res.message,
+            text: todayCalendar.date,
+            attachments: [
+                {
+                    color: '#ffee44',
+                    text: good,
+                },{
+                    color: '#ff4444',
+                    text: bad,
+                },{
+                    text: `面向${todayCalendar.directions}写程序，BUG最少`
+                },{
+                    text: `今日宜饮: ${todayCalendar.todayDrink}`
                 }
-            })
-        })
+                ]
+        });
     })
-
     robot.respond(/api\-history$/,(res)=>{
         let vchannel_id,text,attachments;
 
@@ -358,14 +386,14 @@ module.exports = (robot)=>{
     robot.respond(/\-h$/,(res)=>{
         res.send(helpText);
     })
-    robot.listen((message)=>{
-        console.log(message);
-        if(message.text){
-            console.log(message.text);
-        }
-    },(res)=>{
-        // console.log(res.match);
-    })
+    // robot.listen((message)=>{
+    //     console.log(message);
+    //     if(message.text){
+    //         console.log(message.text);
+    //     }
+    // },(res)=>{
+    //     // console.log(res.match);
+    // })
     // robot.error((err,res)=>{
     //     if(res){
     //         res.reply("DOES NOT COMPUTE");
