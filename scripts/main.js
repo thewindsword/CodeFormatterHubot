@@ -105,7 +105,19 @@ module.exports = (robot)=>{
                         res.reply("图片上传失败："+result.data.msg);
                     }
                     // console.log(result.data);
-
+                    let isFinishReply = false;
+                    const emitReplyImg = (res,result)=>{
+                        robot.emit('bearychat.attachment', {
+                            message: res.message,
+                            text: 'CodeFormatter IMG',
+                            attachments: [
+                                {
+                                    images: [
+                                        { url: result.data.data.url },
+                                    ]
+                                }]
+                        })
+                    }
                     if(isConnectTinyBear === 'compress'){
                         let userList = bearyChatTools.checkUserList();
                         res.send("开始感应对接机器人的气息，开始寻找 TinyBear");
@@ -115,22 +127,17 @@ module.exports = (robot)=>{
                                 if(member.full_name === "TinyBear" || member.name === "TinyBear"){
                                     console.log(member);
                                     res.reply("@<="+member.id+"=> "+result.data.data.url);
+                                    isFinishReply = true;
                                 }
                             })
-                        })
+                            if(!isFinishReply){
+                                emitReplyImg(res,result);
+                            }
+                        });
+                    }else{
+                        emitReplyImg(res,result);
                     }
-
-                    robot.emit('bearychat.attachment', {
-                        message: res.message,
-                        text: 'CodeFormatter IMG',
-                        attachments: [
-                            {
-                                images: [
-                                    { url: result.data.data.url },
-                                ]
-                            }]
-                    })
-
+                    
                     // res.reply(`![code](${result.data.data.url})`);
                 }).catch(er => res.reply("图片上传失败："+er));
                 
