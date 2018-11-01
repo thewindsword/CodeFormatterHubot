@@ -347,9 +347,11 @@ module.exports = (robot)=>{
 1. 输入 {JSON数据} 将会自动返回格式化的JSON数据
 2. @bot t:语言 代码片段
 3. @bot img t:语言 代码片段
-4. @bot img clear 清除服务器缓存（将删除过往图片）
-5. @bot api:API地址 method:get/post 数据
-6. @bot api-history 获取最近100条消息内的api请求记录`
+4. @bot img compress t:语言 代码片段
+    * 将通过TinyBear机器人生成压缩后图片（需要讨论组中有TinyBear并处于正常运行状态）
+5. @bot img clear 清除服务器缓存（将删除过往图片）
+6. @bot api:API地址 method:get/post 数据
+7. @bot api-history 获取最近100条消息内的api请求记录`
     robot.respond(/\-?\-?help$/,(res)=>{
         res.send(helpText);
     })
