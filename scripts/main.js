@@ -64,15 +64,16 @@ module.exports = (robot)=>{
             res.reply("```"+codeType+"\n" + codeBody + "\n```");
         }
     })
-    robot.respond(/img t:([a-z|A-Z]+) ([\d\D]*)$/,(res)=>{
+    robot.respond(/img\s?(compress)? t:([a-z|A-Z]+) ([\d\D]*)$/,(res)=>{
         console.log('img translate',res.match[0]);
         res.reply("图片生成中！");
         // hubot-test: img t:javascript function(){let a = 222; }
-        let prepareToWrite = res.match[2],
+        const isConnectTinyBear = res.match[1];
+        let prepareToWrite = res.match[3],
             fileExt,
             fileParser,
             fileName = 'temp_'+stringHash(prepareToWrite);
-        [fileExt,fileParser] = getFileExt(res.match[1]);
+        [fileExt,fileParser] = getFileExt(res.match[2]);
         try{
             if(fileParser){
                 prepareToWrite = prettier.format(prepareToWrite,{
@@ -83,7 +84,7 @@ module.exports = (robot)=>{
             }
         }catch(e){
             // console.log(e);
-            prepareToWrite = res.match[2];
+            prepareToWrite = res.match[3];
         }
         
         fs.writeFileSync(TEMP_PATH + '/' + fileName + fileExt, prepareToWrite, {
@@ -93,14 +94,6 @@ module.exports = (robot)=>{
         child_carbon.on('exit',function(code){
             console.log('exit:'+code);
             if(code === 0){
-                // 保存成功 fs.existsSync(TEMP_PATH + '/' + fileName + '.png')
-
-                // let data = base64Img.base64Sync(TEMP_PATH + '/' + fileName + '.png');
-                // res.reply(`![code](${data})`);
-                // console.log('base64.length:'+data.length);
-
-                // base64由于消息长度原因会被截断，改用图床
-
                 let formData = new FormData();
                 formData.append('smfile',fs.createReadStream(TEMP_PATH + '/' + fileName + '.png'));
 
@@ -112,6 +105,20 @@ module.exports = (robot)=>{
                         res.reply("图片上传失败："+result.data.msg);
                     }
                     // console.log(result.data);
+
+                    if(isConnectTinyBear === 'compress'){
+                        let userList = bearyChatTools.checkUserList();
+                        res.send("开始感应对接机器人的气息，开始寻找 TinyBear");
+                        userList.then(data=>{
+                            data.forEach(member=>{
+                                // console.log(member.full_name);
+                                if(member.full_name === "TinyBear" || member.name === "TinyBear"){
+                                    console.log(member);
+                                    res.reply("@<="+member.id+"=> "+result.data.data.url);
+                                }
+                            })
+                        })
+                    }
 
                     robot.emit('bearychat.attachment', {
                         message: res.message,
