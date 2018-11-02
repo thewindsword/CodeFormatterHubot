@@ -130,9 +130,9 @@ module.exports = (robot)=>{
     })
     //<xml><MsgId>6197906553041859764</MsgId></xml>
     robot.respond(/t:([a-z|A-Z]+) ([\d\D]*)/,(res)=>{
-        if(res.match[1] === 'xml'|| res.match[1] === 'json'){
-            return;
-        }
+        // if(res.match[1] === 'xml'|| res.match[1] === 'json'){
+        //     return;
+        // }
         res.reply("代码格式化处理中...")
         let codeType,codeBody;
         let [,fileParser] = getFileExt(res.match[1]);
