@@ -20,34 +20,6 @@ const { getFileExt } =  require('../src/utilsFunc');
 const FormData = require('form-data');
 const axios = require('axios');
 var CancelToken = axios.CancelToken;
-var JSONCheck = 0;
-var XMLCheck = 0;
-
-// [补充] 
-// Github地址：https://github.com/thewindsword/CodeFormatterHubot
-
-// [新增]
-// 1. 获取今天的程序员老黄历
-// 命令为：
-// ```
-// @bot today
-// ````
-// ![](https://s1.ax1x.com/2018/11/02/ifzlK1.png)
-
-// 2. 通过唤起[TinyBear机器人](https://www.v2ex.com/t/502933)输出压缩后图片
-// 命令为：
-// ```
-// @bot img compress t:语言 代码片段
-// ````
-// ![](https://s1.ax1x.com/2018/11/02/ifzvs1.png)
-
-// 3. 增加帮助命令
-// 命令为：
-// ```
-// @bot help
-// @bot -h
-// @bot --help
-// ```
 
 
 let TEMP_PATH = path.resolve(__dirname, '../temp/');
