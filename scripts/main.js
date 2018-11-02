@@ -69,9 +69,6 @@ module.exports = (robot)=>{
         }
     })
     robot.hear(/((?<=\<).*(?=\>$))/,(res)=>{
-        if(res.match[1]){
-            return;
-        }
         let catchXML = "<"+res.match[1]+">";
         let result;
         parseString(catchXML,(err, parseBody)=>{
