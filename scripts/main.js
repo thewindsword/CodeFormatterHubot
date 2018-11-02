@@ -73,7 +73,8 @@ module.exports = (robot)=>{
         let result;
         parseString(catchXML,(err, parseBody)=>{
             if(err){
-                // console.log(err);
+                console.log(err);
+                
                 return;
             }
             try{
