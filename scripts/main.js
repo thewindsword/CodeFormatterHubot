@@ -51,13 +51,11 @@ var CancelToken = axios.CancelToken;
 let TEMP_PATH = path.resolve(__dirname, '../temp/');
 
 module.exports = (robot)=>{
-    robot.hear(/(t:json)?\s?((?<=\{).*(?=\}$))/,(res)=>{
-        if(!res.match[1]){
-            return;
-        }
+    robot.hear(/((?<=\{).*(?=\}$))/,(res)=>{
+        console.log(res.match);
         let codeBody;
         try{
-            codeBody = prettier.format("{"+res.match[2]+"}",{
+            codeBody = prettier.format("{"+res.match[1]+"}",{
                 parser: "json"
             });
         }catch(e){
@@ -68,11 +66,11 @@ module.exports = (robot)=>{
             res.send("```json\n" + codeBody + "\n```");
         }
     })
-    robot.hear(/(t:xml)?\s?((?<=\<).*(?=\>$))/,(res)=>{
-        if(!res.match[1]){
+    robot.hear(/((?<=\<).*(?=\>$))/,(res)=>{
+        if(res.match[1]){
             return;
         }
-        let catchXML = "<"+res.match[2]+">";
+        let catchXML = "<"+res.match[1]+">";
         let result;
         parseString(catchXML,(err, parseBody)=>{
             if(err){
