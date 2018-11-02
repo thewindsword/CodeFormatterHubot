@@ -51,8 +51,8 @@ var CancelToken = axios.CancelToken;
 let TEMP_PATH = path.resolve(__dirname, '../temp/');
 
 module.exports = (robot)=>{
-    robot.hear(/(t:json)\s?((?<=\{).*(?=\}$))/,(res)=>{
-        if(res.match[1]){
+    robot.hear(/(t:json)?\s?((?<=\{).*(?=\}$))/,(res)=>{
+        if(!res.match[1]){
             return;
         }
         let codeBody;
@@ -68,8 +68,8 @@ module.exports = (robot)=>{
             res.send("```json\n" + codeBody + "\n```");
         }
     })
-    robot.hear(/(t:xml)\s?((?<=\<).*(?=\>$))/,(res)=>{
-        if(res.match[1]){
+    robot.hear(/(t:xml)?\s?((?<=\<).*(?=\>$))/,(res)=>{
+        if(!res.match[1]){
             return;
         }
         let catchXML = "<"+res.match[2]+">";
