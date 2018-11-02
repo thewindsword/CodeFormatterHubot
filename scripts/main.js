@@ -53,7 +53,7 @@ var XMLCheck = 0;
 let TEMP_PATH = path.resolve(__dirname, '../temp/');
 
 module.exports = (robot)=>{
-    robot.hear(/((?<=\{).*(?=\}$))/,(res)=>{
+    robot.hear(/((?<=\{)[\d\D]*(?=\}$))/,(res)=>{
         console.log(res.match[1]);
         let codeBody;
         try{
@@ -69,7 +69,7 @@ module.exports = (robot)=>{
             res.send("```json\n" + codeBody + "\n```");
         }
     })
-    robot.hear(/((?<=\<).*(?=\>$))/,(res)=>{
+    robot.hear(/((?<=\<)[\d\D]*(?=\>$))/,(res)=>{
         let catchXML = "<"+res.match[1]+">";
         let result;
         parseString(catchXML,(err, parseBody)=>{
