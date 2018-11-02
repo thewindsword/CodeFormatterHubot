@@ -54,13 +54,14 @@ let TEMP_PATH = path.resolve(__dirname, '../temp/');
 
 module.exports = (robot)=>{
     robot.hear(/((?<=\{).*(?=\}$))/,(res)=>{
-        console.log(res.match);
+        console.log(res.match[1]);
         let codeBody;
         try{
             codeBody = prettier.format("{"+res.match[1]+"}",{
                 parser: "json"
             });
         }catch(e){
+            console.log(e);
         }
         if(!codeBody){
 
