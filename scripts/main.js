@@ -20,6 +20,8 @@ const { getFileExt } =  require('../src/utilsFunc');
 const FormData = require('form-data');
 const axios = require('axios');
 var CancelToken = axios.CancelToken;
+var JSONCheck = 0;
+var XMLCheck = 0;
 
 // [补充] 
 // Github地址：https://github.com/thewindsword/CodeFormatterHubot
@@ -129,6 +131,9 @@ module.exports = (robot)=>{
     })
     //<xml><MsgId>6197906553041859764</MsgId></xml>
     robot.respond(/t:([a-z|A-Z]+) ([\d\D]*)/,(res)=>{
+        if(res.match[1] === 'xml'|| res.match[1] === 'json'){
+            return;
+        }
         res.reply("代码格式化处理中...")
         let codeType,codeBody;
         let [,fileParser] = getFileExt(res.match[1]);
