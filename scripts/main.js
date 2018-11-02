@@ -9,49 +9,144 @@ const bearyChatTools = require('../src/bearyChatFunc');
 const shorterDataFunc = require('../src/shorterDataFunc');
 const getProgrammerCalendar = require('../src/getProgrammerCalendar');
 
+// about xml 
+const xml2js = require('xml2js');
+const parseString = xml2js.parseString;
+const xmlBuilder = new xml2js.Builder();
+const xmlFormat = require('xml-formatter');
+
 const { getFileExt } =  require('../src/utilsFunc');
 
 const FormData = require('form-data');
 const axios = require('axios');
 var CancelToken = axios.CancelToken;
 
-// const axiosJSON = axios.create()
+// [补充] 
+// Github地址：https://github.com/thewindsword/CodeFormatterHubot
+
+// [新增]
+// 1. 获取今天的程序员老黄历
+// 命令为：
+// ```
+// @bot today
+// ````
+// ![](https://s1.ax1x.com/2018/11/02/ifzlK1.png)
+
+// 2. 通过唤起[TinyBear机器人](https://www.v2ex.com/t/502933)输出压缩后图片
+// 命令为：
+// ```
+// @bot img compress t:语言 代码片段
+// ````
+// ![](https://s1.ax1x.com/2018/11/02/ifzvs1.png)
+
+// 3. 增加帮助命令
+// 命令为：
+// ```
+// @bot help
+// @bot -h
+// @bot --help
+// ```
 
 
 let TEMP_PATH = path.resolve(__dirname, '../temp/');
 
 module.exports = (robot)=>{
-    robot.hear(/((?<=\{).*(?=\}$))/,(res)=>{
-        // console.log("jsonHear",res.match[0]);
+    robot.hear(/(t:json)\s?((?<=\{).*(?=\}$))/,(res)=>{
+        if(res.match[1]){
+            return;
+        }
         let codeBody;
-        // console.log(res.match[1]);
         try{
-            codeBody = prettier.format("{"+res.match[1]+"}",{
+            codeBody = prettier.format("{"+res.match[2]+"}",{
                 parser: "json"
             });
         }catch(e){
-            // console.log(e);
-            // console.log(codeBody);   
         }
         if(!codeBody){
-            // res.send(null);
+
         }else{
             res.send("```json\n" + codeBody + "\n```");
         }
     })
+    robot.hear(/(t:xml)\s?((?<=\<).*(?=\>$))/,(res)=>{
+        if(res.match[1]){
+            return;
+        }
+        let catchXML = "<"+res.match[2]+">";
+        let result;
+        parseString(catchXML,(err, parseBody)=>{
+            if(err){
+                // console.log(err);
+                return;
+            }
+            try{
+                result = xmlFormat(catchXML);
+            }catch(e){
+                console.log(e);
+            }
+            if(result){
+                res.reply("```xml\n" + result + "\n```");
+            }
+        })
+    })
+
+    // 转换 json 为 xml
+    robot.respond(/tx[\s]?(\{[\d\D]*\}$)/,(res)=>{
+        let catchJSON = res.match[1];
+        let result;
+        try{
+            catchJSON = JSON.parse(catchJSON);
+            result = xmlFormat(xmlBuilder.buildObject(catchJSON));
+        }catch(e){
+            console.log(e);
+            res.reply("转换为xml失败");
+        }
+        if(result){
+            res.reply("```xml\n" + result + "\n```");
+        }
+    })
+    // 转换 xml 为 json
+    robot.respond(/tj[\s]?(\<[\d\D]*\>$)/,(res)=>{
+        let catchXML = res.match[1];
+        console.log(catchXML);
+        let result;
+        parseString(catchXML,(err, parseBody)=>{
+            if(err){
+                console.log(err);
+                res.reply("转换为json失败")
+                return;
+            }
+            parseBody = JSON.stringify(parseBody);
+            try{
+                result = prettier.format(parseBody,{parser: 'json'});
+            }catch(e){
+                console.log(e);
+            }
+            if(result){
+                res.reply("```json\n" + result + "\n```");
+            }else{
+                res.reply("无法格式化，简单格式化处理：\n```json\n" + parseBody + "\n```");
+            }
+        })
+    })
+    //<xml><MsgId>6197906553041859764</MsgId></xml>
     robot.respond(/t:([a-z|A-Z]+) ([\d\D]*)/,(res)=>{
         res.reply("代码格式化处理中...")
         let codeType,codeBody;
         let [,fileParser] = getFileExt(res.match[1]);
-        console.log(fileParser);
         try{
             codeType = res.match[1];
+            
             if(fileParser){
                 codeBody = prettier.format(res.match[2],{
                     parser: fileParser
                 });
             }else{
-                codeBody = prettier.format(res.match[2]);
+                if(codeType === 'xml'){
+                    codeBody = xmlFormat(res.match[2]);
+                }else{
+                    codeBody = prettier.format(res.match[2]);
+                }
             }
         }catch(e){
             console.log(e);
@@ -312,8 +407,19 @@ module.exports = (robot)=>{
     //         })
     //     })
     // })
-    robot.respond(/today$/,(res)=>{
-        let todayCalendar = getProgrammerCalendar();
+    robot.respond(/(today|tomorrow)$/,(res)=>{
+        let todayCalendar;
+        switch(res.match[1]){
+            case 'today':
+            todayCalendar = getProgrammerCalendar(new Date());
+            break;
+            case 'tomorrow':
+            let tomorrow = new Date();
+            tomorrow.setTime(tomorrow.getTime()+24*60*60*1000);
+            todayCalendar = getProgrammerCalendar(tomorrow);
+            break;
+        }
+        
         let good = '',bad = '';
         todayCalendar.good.forEach(item=>{
             good+=`**${item.name}** ${item.good}\n`;
@@ -335,7 +441,7 @@ module.exports = (robot)=>{
                 },
                 {
                     color: '#ff4444',
-                    text: "**不宜：**",
+                    text: "**今日不宜：**",
                 },
                 {
                     color: '#ff4444',
@@ -381,13 +487,17 @@ module.exports = (robot)=>{
     })
     const helpText = `用法列表：
 1. 输入 {JSON数据} 将会自动返回格式化的JSON数据
-2. @bot t:语言 代码片段
-3. @bot img t:语言 代码片段
-4. @bot img compress t:语言 代码片段
+2. 输入 <XML数据> 将会自动返回格式化的XML数据
+3. @bot tx {JSON数据} 转换JSON数据为XML数据返回
+4. @bot tj <XML数据> 转换XML数据为JSON数据返回
+5. @bot t:语言 代码片段
+6. @bot img t:语言 代码片段
+7. @bot img compress t:语言 代码片段
     * 将通过TinyBear机器人生成压缩后图片（需要讨论组中有TinyBear并处于正常运行状态）
-5. @bot img clear 清除服务器缓存（将删除过往图片）
-6. @bot api:API地址 method:get/post 数据
-7. @bot api-history 获取最近100条消息内的api请求记录`
+8. @bot img clear 清除服务器缓存（将删除过往图片）
+9. @bot api:API地址 method:get/post 数据
+10. @bot api-history 获取最近100条消息内的api请求记录
+11. @bot today|tomorrow 将获取对应日期的老黄历`
     robot.respond(/\-?\-?help$/,(res)=>{
         res.send(helpText);
     })

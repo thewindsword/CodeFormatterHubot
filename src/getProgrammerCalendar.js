@@ -1,10 +1,9 @@
 // 程序员老黄历生成
 // 代码来自于 https://sandbox.runjs.cn/show/ydp3it7b
 // 为保证原汁原味与网页版一致，不对代码进行修改，只做代码的搬运工
-module.exports = () => {
+module.exports = (date) => {
     
-
-    let today = new Date();
+    let today = date;
     let iday = (today.getMonth() + 1) * 100 + today.getDate();
     let weeks = ["日","一","二","三","四","五","六"];
     let directions = ["北方","东北方","东方","东南方","南方","西南方","西方","西北方"];
@@ -81,7 +80,7 @@ function pickRandom(array, size, iday) {
 	return result;
 }
 function getTodayString(today,weeks) {
-	return "今天是" + today.getFullYear() + "年" + (today.getMonth() + 1) + "月" + today.getDate() + "日 星期" + weeks[today.getDay()];
+	return today.getFullYear() + "年" + (today.getMonth() + 1) + "月" + today.getDate() + "日 星期" + weeks[today.getDay()];
 }
 function pickTodaysLuck(result, today, varNames, tools, activities,iday,specials) {
     let _activities = filter(activities,today);
